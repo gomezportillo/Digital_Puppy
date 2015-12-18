@@ -13,7 +13,7 @@ public class VentanaPrincipal {
 	private JFrame frmDigitalPuppy;
 	private JLabel lblInformation;
 	private JTabbedPane tabbedPane;
-	private JPanel pnl_perros;
+	private PanelPerros pnl_perros;
 	private JPanel pnl_voluntarios;
 	private JPanel pnl_perdidos;
 	private JPanel pnl_socios;
@@ -49,7 +49,7 @@ public class VentanaPrincipal {
 	private void initialize() {
 		frmDigitalPuppy = new JFrame();
 		frmDigitalPuppy.setTitle("Digital Puppy");
-		frmDigitalPuppy.setBounds(100, 100, 635, 418);
+		frmDigitalPuppy.setBounds(100, 100, 746, 490);
 		frmDigitalPuppy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		{
 			lblInformation = new JLabel("Information");
@@ -59,7 +59,7 @@ public class VentanaPrincipal {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			frmDigitalPuppy.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 			{
-				pnl_perros = new JPanel();
+				pnl_perros = new PanelPerros();
 				tabbedPane.addTab("Perros", null, pnl_perros, null);
 			}
 			{
