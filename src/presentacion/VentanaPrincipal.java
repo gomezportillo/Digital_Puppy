@@ -59,7 +59,7 @@ public class VentanaPrincipal {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			frmDigitalPuppy.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 			{
-				pnl_perros = new PanelPerros();
+				pnl_perros = new PanelPerros(frmDigitalPuppy);
 				tabbedPane.addTab("Perros", null, pnl_perros, null);
 			}
 			{
@@ -82,9 +82,7 @@ public class VentanaPrincipal {
 				pnl_perrera = new JPanel();
 				tabbedPane.addTab("Perrera", null, pnl_perrera, null);
 			}
-		}
-		
-		
+		}	
 	}
 
 }

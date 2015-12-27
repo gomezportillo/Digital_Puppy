@@ -1,55 +1,72 @@
 package presentacion;
 
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.border.TitledBorder;
-import javax.swing.JTable;
-import javax.swing.JEditorPane;
-import javax.swing.JSeparator;
 import java.awt.Dimension;
-import javax.swing.UIManager;
-import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.MutableComboBoxModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.TitledBorder;
+
+@SuppressWarnings("unchecked, rawtypes")
 public class PanelPerros extends JPanel {
-	private JButton btnNewButton;
+	private JFrame frame;
+	private JButton btn_anadir;
 	private JScrollPane scrollPane;
 	private JPanel panel_datos;
 	private JScrollPane scrollPane_tabla;
 	private JEditorPane editorPane;
-	private JButton btnBorrar;
-	private JButton btnActualizar;
+	private JButton bton_borrar;
+	private JButton btn_actualizar;
 	private JPanel panel_foto;
 	private JPanel panel_info;
 	private JButton btnNewButton_1;
 	private JScrollPane scrollPane_1;
-	private JLabel lblFotoperro;
+	private JLabel lblFoto;
 	private JLabel lblNombre;
 	private JLabel lblNewLabel;
 	private JLabel lblRaza;
 	private JLabel lblPeligroso;
 	private JLabel lblNewLabel_1;
 	private JLabel lblEstado;
-	private JTable table;
 	private JTextField tf_nombre;
-	private JSpinner spinner;
-	private JComboBox comboBox;
+	private JSpinner sp_edad;
+	private JComboBox cb_estado;
+	private JList list;
+	private JTextField tf_raza;
+	private JCheckBox cb_peligroso;
+	private JCheckBox cb_esterilizado;
 
 	/**
 	 * Create the panel.
 	 */
-	public PanelPerros() {
+
+	public PanelPerros(JFrame frame) {
+		this.frame = frame;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{147, 150, 0};
 		gridBagLayout.rowHeights = new int[]{331, 32, 0};
@@ -57,13 +74,8 @@ public class PanelPerros extends JPanel {
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		{
-			btnNewButton = new JButton("Añadir perrete");
-			btnNewButton.addActionListener(new BtnNewButtonActionListener());
-			{
-				{
-
-				}
-			}
+			btn_anadir = new JButton("Añadir nuevo perrete");
+			btn_anadir.addActionListener(new AnadirPerrete());
 			{
 				scrollPane_tabla = new JScrollPane();
 				scrollPane_tabla.setBorder(new TitledBorder(null, "Perretes", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -74,8 +86,15 @@ public class PanelPerros extends JPanel {
 				gbc_scrollPane_tabla.gridy = 0;
 				add(scrollPane_tabla, gbc_scrollPane_tabla);
 				{
-					table = new JTable();
-					scrollPane_tabla.setViewportView(table);
+					list = new JList();
+					// list.setModel(new DefaultListModel()); **IMPORTANTE** 
+					list.setModel(new DefaultListModel());
+					list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+					list.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+					list.setValueIsAdjusting(true);
+					list.setToolTipText("");
+					list.setVisibleRowCount(100);
+					scrollPane_tabla.setColumnHeaderView(list);
 				}
 			}
 			{
@@ -91,9 +110,9 @@ public class PanelPerros extends JPanel {
 				add(panel_datos, gbc_panel_datos);
 				GridBagLayout gbl_panel_datos = new GridBagLayout();
 				gbl_panel_datos.columnWidths = new int[] {200, 1};
-				gbl_panel_datos.rowHeights = new int[] {252, 4, 104};
+				gbl_panel_datos.rowHeights = new int[] {245, 47, 54};
 				gbl_panel_datos.columnWeights = new double[]{0.0, 1.0};
-				gbl_panel_datos.rowWeights = new double[]{1.0, 0.0, 1.0};
+				gbl_panel_datos.rowWeights = new double[]{1.0, 0.0, 0.0};
 				panel_datos.setLayout(gbl_panel_datos);
 				{
 					panel_foto = new JPanel();
@@ -119,12 +138,13 @@ public class PanelPerros extends JPanel {
 						gbc_scrollPane_1.gridy = 0;
 						panel_foto.add(scrollPane_1, gbc_scrollPane_1);
 						{
-							lblFotoperro = new JLabel("FotoPerro");
-							scrollPane_1.setViewportView(lblFotoperro);
+							lblFoto = new JLabel("");
+							scrollPane_1.setViewportView(lblFoto);
 						}
 					}
 					{
 						btnNewButton_1 = new JButton("Seleccionar foto");
+						btnNewButton_1.addActionListener(new SeleccionarFoto());
 						GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 						gbc_btnNewButton_1.gridx = 0;
 						gbc_btnNewButton_1.gridy = 1;
@@ -175,13 +195,14 @@ public class PanelPerros extends JPanel {
 						panel_info.add(lblNewLabel, gbc_lblNewLabel);
 					}
 					{
-						spinner = new JSpinner();
-						GridBagConstraints gbc_spinner = new GridBagConstraints();
-						gbc_spinner.fill = GridBagConstraints.BOTH;
-						gbc_spinner.insets = new Insets(0, 0, 5, 0);
-						gbc_spinner.gridx = 1;
-						gbc_spinner.gridy = 1;
-						panel_info.add(spinner, gbc_spinner);
+						sp_edad = new JSpinner();
+						sp_edad.setModel(new SpinnerNumberModel(0, 0, 20, 1));
+						GridBagConstraints gbc_sp_edad = new GridBagConstraints();
+						gbc_sp_edad.anchor = GridBagConstraints.WEST;
+						gbc_sp_edad.insets = new Insets(0, 0, 5, 0);
+						gbc_sp_edad.gridx = 1;
+						gbc_sp_edad.gridy = 1;
+						panel_info.add(sp_edad, gbc_sp_edad);
 					}
 					{
 						lblRaza = new JLabel("Raza");
@@ -193,6 +214,16 @@ public class PanelPerros extends JPanel {
 						panel_info.add(lblRaza, gbc_lblRaza);
 					}
 					{
+						tf_raza = new JTextField();
+						GridBagConstraints gbc_tf_raza = new GridBagConstraints();
+						gbc_tf_raza.insets = new Insets(0, 0, 5, 0);
+						gbc_tf_raza.fill = GridBagConstraints.HORIZONTAL;
+						gbc_tf_raza.gridx = 1;
+						gbc_tf_raza.gridy = 2;
+						panel_info.add(tf_raza, gbc_tf_raza);
+						tf_raza.setColumns(10);
+					}
+					{
 						lblPeligroso = new JLabel("Peligroso");
 						GridBagConstraints gbc_lblPeligroso = new GridBagConstraints();
 						gbc_lblPeligroso.anchor = GridBagConstraints.WEST;
@@ -200,6 +231,15 @@ public class PanelPerros extends JPanel {
 						gbc_lblPeligroso.gridx = 0;
 						gbc_lblPeligroso.gridy = 3;
 						panel_info.add(lblPeligroso, gbc_lblPeligroso);
+					}
+					{
+						cb_peligroso = new JCheckBox("");
+						GridBagConstraints gbc_cb_peligroso = new GridBagConstraints();
+						gbc_cb_peligroso.anchor = GridBagConstraints.WEST;
+						gbc_cb_peligroso.insets = new Insets(0, 0, 5, 0);
+						gbc_cb_peligroso.gridx = 1;
+						gbc_cb_peligroso.gridy = 3;
+						panel_info.add(cb_peligroso, gbc_cb_peligroso);
 					}
 					{
 						lblNewLabel_1 = new JLabel("Esterilizado");
@@ -211,6 +251,15 @@ public class PanelPerros extends JPanel {
 						panel_info.add(lblNewLabel_1, gbc_lblNewLabel_1);
 					}
 					{
+						cb_esterilizado = new JCheckBox("");
+						GridBagConstraints gbc_cb_esterilizado = new GridBagConstraints();
+						gbc_cb_esterilizado.anchor = GridBagConstraints.WEST;
+						gbc_cb_esterilizado.insets = new Insets(0, 0, 5, 0);
+						gbc_cb_esterilizado.gridx = 1;
+						gbc_cb_esterilizado.gridy = 4;
+						panel_info.add(cb_esterilizado, gbc_cb_esterilizado);
+					}
+					{
 						lblEstado = new JLabel("Estado");
 						GridBagConstraints gbc_lblEstado = new GridBagConstraints();
 						gbc_lblEstado.anchor = GridBagConstraints.WEST;
@@ -220,32 +269,35 @@ public class PanelPerros extends JPanel {
 						panel_info.add(lblEstado, gbc_lblEstado);
 					}
 					{
-						comboBox = new JComboBox();
-						comboBox.setModel(new DefaultComboBoxModel(new String[] {"Adoptado", "Reservado", "En celo", "Fallecido"}));
-						GridBagConstraints gbc_comboBox = new GridBagConstraints();
-						gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-						gbc_comboBox.gridx = 1;
-						gbc_comboBox.gridy = 5;
-						panel_info.add(comboBox, gbc_comboBox);
+						cb_estado = new JComboBox();
+						cb_estado.setModel(new DefaultComboBoxModel(new String[] {"En perrera", "Reservado", "Adoptado", "Perdido", "Fallecido"}));
+						GridBagConstraints gbc_cb_estado = new GridBagConstraints();
+						gbc_cb_estado.fill = GridBagConstraints.HORIZONTAL;
+						gbc_cb_estado.gridx = 1;
+						gbc_cb_estado.gridy = 5;
+						panel_info.add(cb_estado, gbc_cb_estado);
+						cb_estado.setSelectedIndex(-1);
 					}
 				}
 				{
-					btnBorrar = new JButton("Borrar");
-					GridBagConstraints gbc_btnBorrar = new GridBagConstraints();
-					gbc_btnBorrar.fill = GridBagConstraints.HORIZONTAL;
-					gbc_btnBorrar.insets = new Insets(0, 0, 5, 5);
-					gbc_btnBorrar.gridx = 0;
-					gbc_btnBorrar.gridy = 1;
-					panel_datos.add(btnBorrar, gbc_btnBorrar);
+					bton_borrar = new JButton("Borrar perrete");
+					bton_borrar.addActionListener(new BorrarPerrete());
+					GridBagConstraints gbc_bton_borrar = new GridBagConstraints();
+					gbc_bton_borrar.fill = GridBagConstraints.HORIZONTAL;
+					gbc_bton_borrar.insets = new Insets(0, 0, 5, 5);
+					gbc_bton_borrar.gridx = 0;
+					gbc_bton_borrar.gridy = 1;
+					panel_datos.add(bton_borrar, gbc_bton_borrar);
 				}
 				{
-					btnActualizar = new JButton("Actualizar");
-					GridBagConstraints gbc_btnActualizar = new GridBagConstraints();
-					gbc_btnActualizar.fill = GridBagConstraints.HORIZONTAL;
-					gbc_btnActualizar.insets = new Insets(0, 0, 5, 0);
-					gbc_btnActualizar.gridx = 1;
-					gbc_btnActualizar.gridy = 1;
-					panel_datos.add(btnActualizar, gbc_btnActualizar);
+					btn_actualizar = new JButton("Actualizar información");
+					btn_actualizar.addActionListener(new ActualizarPerrete());
+					GridBagConstraints gbc_btn_actualizar = new GridBagConstraints();
+					gbc_btn_actualizar.fill = GridBagConstraints.HORIZONTAL;
+					gbc_btn_actualizar.insets = new Insets(0, 0, 5, 0);
+					gbc_btn_actualizar.gridx = 1;
+					gbc_btn_actualizar.gridy = 1;
+					panel_datos.add(btn_actualizar, gbc_btn_actualizar);
 				}
 				{
 					editorPane = new JEditorPane();
@@ -258,18 +310,61 @@ public class PanelPerros extends JPanel {
 					panel_datos.add(editorPane, gbc_editorPane);
 				}
 			}
-			GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-			gbc_btnNewButton.fill = GridBagConstraints.BOTH;
-			gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
-			gbc_btnNewButton.gridx = 0;
-			gbc_btnNewButton.gridy = 1;
-			add(btnNewButton, gbc_btnNewButton);
+			GridBagConstraints gbc_btn_anadir = new GridBagConstraints();
+			gbc_btn_anadir.fill = GridBagConstraints.BOTH;
+			gbc_btn_anadir.insets = new Insets(0, 0, 0, 5);
+			gbc_btn_anadir.gridx = 0;
+			gbc_btn_anadir.gridy = 1;
+			add(btn_anadir, gbc_btn_anadir);
 		}
-
 	}
 
-	private class BtnNewButtonActionListener implements ActionListener {
+	private void guardarArchivoPerrete() {
+		
+		
+	}
+	public void cargarArchivoPerrete() {
+		
+	}
+
+	private class AnadirPerrete implements ActionListener { //añadir perrete
 		public void actionPerformed(ActionEvent arg0) {
+			int indice = list.getModel().getSize();
+			((DefaultListModel) list.getModel()).addElement("Nuevo perrete");
+			list.setSelectedIndex(indice);
+			list.ensureIndexIsVisible(indice);	
 		}
 	}
+	
+	private class BorrarPerrete implements ActionListener { //borrar perrete
+		public void actionPerformed(ActionEvent e) {
+			tf_nombre.setText("");
+			sp_edad.setValue(0);
+			tf_raza.setText("");
+			cb_peligroso.setEnabled(false);
+			cb_esterilizado.setEnabled(false);
+			cb_estado.setSelectedIndex(-1);
+		}
+	}
+	
+	private class ActualizarPerrete implements ActionListener { //actualizar perrete
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	}
+	
+	
+	private class SeleccionarFoto implements ActionListener { //seleccionar foto
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser  fcAbrir = new JFileChooser();
+			fcAbrir.setFileFilter (new ImageFilter());
+			int valorDevuelto  = fcAbrir.showOpenDialog (frame);
+			if (valorDevuelto  == JFileChooser.APPROVE_OPTION)  {
+				File file = fcAbrir.getSelectedFile();
+				lblFoto.setIcon (new ImageIcon (file.getAbsolutePath()));
+			}
+		}
+	}
+		
+	
 }
