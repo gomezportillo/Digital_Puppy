@@ -6,9 +6,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
 
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -20,26 +25,29 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.MutableComboBoxModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-@SuppressWarnings("unchecked, rawtypes")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class PanelPerros extends JPanel {
+	private static final long serialVersionUID = -7518504297885688690L;
 	private JFrame frame;
 	private JButton btn_anadir;
-	private JScrollPane scrollPane;
 	private JPanel panel_datos;
 	private JScrollPane scrollPane_tabla;
-	private JEditorPane editorPane;
+	private JEditorPane tb_comentarios;
 	private JButton bton_borrar;
 	private JButton btn_actualizar;
 	private JPanel panel_foto;
@@ -60,11 +68,13 @@ public class PanelPerros extends JPanel {
 	private JTextField tf_raza;
 	private JCheckBox cb_peligroso;
 	private JCheckBox cb_esterilizado;
+	private JButton btnEliminarFoto;
 
 	/**
 	 * Create the panel.
 	 */
 
+	
 	public PanelPerros(JFrame frame) {
 		this.frame = frame;
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -87,6 +97,7 @@ public class PanelPerros extends JPanel {
 				add(scrollPane_tabla, gbc_scrollPane_tabla);
 				{
 					list = new JList();
+					list.addListSelectionListener(new ListListSelectionListener());
 					// list.setModel(new DefaultListModel()); **IMPORTANTE** 
 					list.setModel(new DefaultListModel());
 					list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -109,9 +120,9 @@ public class PanelPerros extends JPanel {
 				gbc_panel_datos.gridy = 0;
 				add(panel_datos, gbc_panel_datos);
 				GridBagLayout gbl_panel_datos = new GridBagLayout();
-				gbl_panel_datos.columnWidths = new int[] {200, 1};
+				gbl_panel_datos.columnWidths = new int[] {186, 209};
 				gbl_panel_datos.rowHeights = new int[] {245, 47, 54};
-				gbl_panel_datos.columnWeights = new double[]{0.0, 1.0};
+				gbl_panel_datos.columnWeights = new double[]{1.0, 1.0};
 				gbl_panel_datos.rowWeights = new double[]{1.0, 0.0, 0.0};
 				panel_datos.setLayout(gbl_panel_datos);
 				{
@@ -124,14 +135,15 @@ public class PanelPerros extends JPanel {
 					gbc_panel_foto.gridy = 0;
 					panel_datos.add(panel_foto, gbc_panel_foto);
 					GridBagLayout gbl_panel_foto = new GridBagLayout();
-					gbl_panel_foto.columnWidths = new int[]{0, 0};
+					gbl_panel_foto.columnWidths = new int[]{106, 0, 0};
 					gbl_panel_foto.rowHeights = new int[]{0, 0, 0};
-					gbl_panel_foto.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+					gbl_panel_foto.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 					gbl_panel_foto.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 					panel_foto.setLayout(gbl_panel_foto);
 					{
 						scrollPane_1 = new JScrollPane();
 						GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+						gbc_scrollPane_1.gridwidth = 2;
 						gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
 						gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
 						gbc_scrollPane_1.gridx = 0;
@@ -139,6 +151,7 @@ public class PanelPerros extends JPanel {
 						panel_foto.add(scrollPane_1, gbc_scrollPane_1);
 						{
 							lblFoto = new JLabel("");
+							lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
 							scrollPane_1.setViewportView(lblFoto);
 						}
 					}
@@ -146,9 +159,18 @@ public class PanelPerros extends JPanel {
 						btnNewButton_1 = new JButton("Seleccionar foto");
 						btnNewButton_1.addActionListener(new SeleccionarFoto());
 						GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+						gbc_btnNewButton_1.insets = new Insets(0, 0, 0, 5);
 						gbc_btnNewButton_1.gridx = 0;
 						gbc_btnNewButton_1.gridy = 1;
 						panel_foto.add(btnNewButton_1, gbc_btnNewButton_1);
+					}
+					{
+						btnEliminarFoto = new JButton("Eliminar foto");
+						btnEliminarFoto.addActionListener(new BtnEliminarFotoActionListener());
+						GridBagConstraints gbc_btnEliminarFoto = new GridBagConstraints();
+						gbc_btnEliminarFoto.gridx = 1;
+						gbc_btnEliminarFoto.gridy = 1;
+						panel_foto.add(btnEliminarFoto, gbc_btnEliminarFoto);
 					}
 				}
 				{
@@ -196,7 +218,7 @@ public class PanelPerros extends JPanel {
 					}
 					{
 						sp_edad = new JSpinner();
-						sp_edad.setModel(new SpinnerNumberModel(0, 0, 20, 1));
+						sp_edad.setModel(new SpinnerNumberModel(1, 1, 20, 1));
 						GridBagConstraints gbc_sp_edad = new GridBagConstraints();
 						gbc_sp_edad.anchor = GridBagConstraints.WEST;
 						gbc_sp_edad.insets = new Insets(0, 0, 5, 0);
@@ -276,7 +298,7 @@ public class PanelPerros extends JPanel {
 						gbc_cb_estado.gridx = 1;
 						gbc_cb_estado.gridy = 5;
 						panel_info.add(cb_estado, gbc_cb_estado);
-						cb_estado.setSelectedIndex(-1);
+						cb_estado.setSelectedIndex(0);
 					}
 				}
 				{
@@ -290,8 +312,8 @@ public class PanelPerros extends JPanel {
 					panel_datos.add(bton_borrar, gbc_bton_borrar);
 				}
 				{
-					btn_actualizar = new JButton("Actualizar información");
-					btn_actualizar.addActionListener(new ActualizarPerrete());
+					btn_actualizar = new JButton("Guardar cambios");
+					btn_actualizar.addActionListener(new GuardarPerrete());
 					GridBagConstraints gbc_btn_actualizar = new GridBagConstraints();
 					gbc_btn_actualizar.fill = GridBagConstraints.HORIZONTAL;
 					gbc_btn_actualizar.insets = new Insets(0, 0, 5, 0);
@@ -300,14 +322,14 @@ public class PanelPerros extends JPanel {
 					panel_datos.add(btn_actualizar, gbc_btn_actualizar);
 				}
 				{
-					editorPane = new JEditorPane();
-					editorPane.setBorder(new TitledBorder(null, "Comentarios", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-					GridBagConstraints gbc_editorPane = new GridBagConstraints();
-					gbc_editorPane.gridwidth = 2;
-					gbc_editorPane.fill = GridBagConstraints.BOTH;
-					gbc_editorPane.gridx = 0;
-					gbc_editorPane.gridy = 2;
-					panel_datos.add(editorPane, gbc_editorPane);
+					tb_comentarios = new JEditorPane();
+					tb_comentarios.setBorder(new TitledBorder(null, "Comentarios", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+					GridBagConstraints gbc_tb_comentarios = new GridBagConstraints();
+					gbc_tb_comentarios.gridwidth = 2;
+					gbc_tb_comentarios.fill = GridBagConstraints.BOTH;
+					gbc_tb_comentarios.gridx = 0;
+					gbc_tb_comentarios.gridy = 2;
+					panel_datos.add(tb_comentarios, gbc_tb_comentarios);
 				}
 			}
 			GridBagConstraints gbc_btn_anadir = new GridBagConstraints();
@@ -317,44 +339,156 @@ public class PanelPerros extends JPanel {
 			gbc_btn_anadir.gridy = 1;
 			add(btn_anadir, gbc_btn_anadir);
 		}
+
+		cargarTodosPerretes();
+
 	}
 
-	private void guardarArchivoPerrete() {
-		
-		
-	}
-	public void cargarArchivoPerrete() {
-		
+	/**
+	 *  Abre el directorio data/perretes/ donde estan los archivos .perrete de 
+	 *  todos los perros de la perrera y añade los nombres uno a uno a la JList.
+	 *  Ojo, solo añade los nombres de los archivos. El unico archivo que abre 
+	 *  es el ultimo, que es el que muestra al iniciar la aplicacion.
+	 */
+	public void cargarTodosPerretes() {
+		File directorio = new File("data/perretes/");
+		File[] archivosEnDirectorio = directorio.listFiles();
+		if (archivosEnDirectorio != null) {
+			String archivo = null;
+			for (File child : archivosEnDirectorio) {
+				archivo = child.getName();
+				String extension = archivo.substring(archivo.length() - 8, archivo.length());
+				if (extension.equals(".perrete"))
+					anadirPerreteALista(archivo.substring(0, archivo.length() - 8));
+			}
+			cargarPerrete(archivo);
+		}
 	}
 
-	private class AnadirPerrete implements ActionListener { //añadir perrete
+	/**
+	 * A partir del nombre de un archivo, lo abre y llena los campos del panel con los datos que tiene
+	 * @param nombrePerrete nombre del archivo
+	 */
+	public void cargarPerrete(String nombreArchivo) {
+		limpiarCampos();
+		File file = new File("data/perretes/" + nombreArchivo);
+		System.out.println(file.getAbsolutePath());
+
+
+		try{
+			FileReader fr = new FileReader (file.getAbsolutePath());
+			BufferedReader br = new BufferedReader(fr);
+
+			tf_nombre.setText(br.readLine());
+			sp_edad.setValue(new Integer(br.readLine()));
+			tf_raza.setText(br.readLine());
+			if (br.readLine().contains("true")) cb_peligroso.setSelected(true);
+			if (br.readLine().contains("true")) cb_esterilizado.setSelected(true);
+			cb_estado.setSelectedIndex(new Integer(br.readLine()));
+			lblFoto.setIcon (new ImageIcon (br.readLine()));
+
+			br.close();
+
+		} catch (IOException ioe){
+			//System.out.println(ioe);
+		}
+	}
+
+	/**
+	 * Vacia todos los campos del panel 
+	 */
+	public void limpiarCampos() {
+		tf_nombre.setText("");
+		sp_edad.setValue(0);
+		tf_raza.setText("");
+		cb_peligroso.setSelected(false);
+		cb_esterilizado.setSelected(false);
+		cb_estado.setSelectedIndex(-1);
+		lblFoto.setIcon(null);
+	}
+
+	/**
+	 * Listener para el boton "Añadir perrete". Desde aqui no lo guardamos, solo creamos una entrada
+	 * en la tabla, y cuando le usuario termine de completarla de da a Guardar para guardarlo
+	 */
+	private class AnadirPerrete implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			int indice = list.getModel().getSize();
-			((DefaultListModel) list.getModel()).addElement("Nuevo perrete");
-			list.setSelectedIndex(indice);
-			list.ensureIndexIsVisible(indice);	
+			String nombre = JOptionPane.showInputDialog("Nombre del nuevo perrete");
+			if (nombre != null && nombre.length()>1){
+				System.out.println(nombre);
+				anadirPerreteALista(nombre);
+				tf_nombre.setText(nombre);
+			}
+			else if(nombre != null) JOptionPane.showConfirmDialog(frame, "Seleccione un nombre valido", "Guardar", JOptionPane.WARNING_MESSAGE);
 		}
 	}
-	
-	private class BorrarPerrete implements ActionListener { //borrar perrete
+
+	/**
+	 * Listener para el botón "Borrar perrete". Borra el archivo con su información y lo elimina de la Jlist
+	 */
+	private class BorrarPerrete implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			tf_nombre.setText("");
-			sp_edad.setValue(0);
-			tf_raza.setText("");
-			cb_peligroso.setEnabled(false);
-			cb_esterilizado.setEnabled(false);
-			cb_estado.setSelectedIndex(-1);
+			int index = list.getSelectedIndex();
+			String perreteSeleccionado = list.getModel().getElementAt(index).toString();
+
+			int reply = JOptionPane.showConfirmDialog(frame, "¿Seguro que quiere eliminar a "+perreteSeleccionado+"?", "Eliminar", JOptionPane.YES_NO_OPTION);
+
+			if (reply == JOptionPane.YES_OPTION) {
+				limpiarCampos();
+				System.out.println("1");
+				((DefaultListModel)list.getModel()).removeElementAt(index);
+				System.out.println("2");
+				try{
+					File archivoPerrete = new File("data/perretes/" + perreteSeleccionado +".perrete");
+					archivoPerrete.delete();
+				}catch(Exception e1){
+					//System.out.println(e1.toString());
+				}
+			}		
 		}
 	}
-	
-	private class ActualizarPerrete implements ActionListener { //actualizar perrete
+
+
+	/**
+	 * Listener para el boton "Guardar cambios". Guardamos todos los campos en texto plano 
+	 * en un archivo con extensión ".perrete" para luego cargarlos desde el programa.
+	 */
+	private class GuardarPerrete implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+			String nombrePerrete = tf_nombre.getText().equals("") ? "Perrete"+(new Random()).nextInt(998) : tf_nombre.getText();
+			String razaPerrete = tf_raza.getText().equals("") ? "Mestizo" : tf_raza.getText();
+			String stringToSave = 	nombrePerrete +"\r\n"+
+					sp_edad.getValue() +"\r\n"+
+					razaPerrete +"\r\n"+
+					cb_peligroso.isSelected() +"\r\n"+
+					cb_esterilizado.isSelected() +"\r\n"+
+					cb_estado.getSelectedIndex() +"\r\n"+
+					lblFoto.getIcon() +"\r\n"+
+					tb_comentarios.getText();
+			//System.out.println(stringToSave);
+			int reply = JOptionPane.showConfirmDialog(frame, "¿Seguro que quiere guardar?", "Guardar", JOptionPane.YES_NO_OPTION);
+
+			if (reply == JOptionPane.YES_OPTION) {
+				File fileName = new File("data/perretes/" + nombrePerrete + ".perrete");
+				BufferedWriter outFile;
+				try {
+					outFile = new BufferedWriter(new FileWriter(fileName));
+					outFile.write(stringToSave);
+					outFile.close();
+					JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente", "Guardar", JOptionPane.INFORMATION_MESSAGE);
+				} catch (IOException e1) {
+					System.out.println("Error guardando el archivo. Reinicie el programa y vuelva a intentarlo");
+				}
+			}	else{
+				System.out.println("Guardado cancelado por el usuario");
+			}
 		}
 	}
-	
-	
-	private class SeleccionarFoto implements ActionListener { //seleccionar foto
+
+	/**
+	 * Listener para añadir una foto al perrete en cuestión
+	 */
+	private class SeleccionarFoto implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser  fcAbrir = new JFileChooser();
 			fcAbrir.setFileFilter (new ImageFilter());
@@ -365,6 +499,44 @@ public class PanelPerros extends JPanel {
 			}
 		}
 	}
-		
-	
+
+	/**
+	 * Listener del boton "Borrar foto"
+	 */
+	private class BtnEliminarFotoActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			lblFoto.setIcon(null);
+		}
+	}
+
+	/**
+	 * Este listener se ejecutará cuando pinchemos en un elemento de la lista
+	 */
+	private class ListListSelectionListener implements ListSelectionListener { 
+		public void valueChanged(ListSelectionEvent arg0) {
+			String perreteSeleccionado = null;
+			try{
+				perreteSeleccionado = list.getModel().getElementAt(list.getSelectedIndex()).toString();
+				
+			}catch(Exception e1) { //se ralla con los index cuando se borra un elemento de la lista
+				perreteSeleccionado = list.getModel().getElementAt(0).toString();
+				list.setSelectedIndex(0);
+			}
+			if (!list.getValueIsAdjusting())
+				cargarPerrete(perreteSeleccionado+".perrete");
+		}
+	}
+
+	/**
+	 * Este metodo será ejecutado cuando queramos añadir un nuevo elemento a la lista
+	 * @param name String con el elemento que queremos añadir
+	 */
+	public void anadirPerreteALista(String name) {
+		int indice = list.getModel().getSize();
+		((DefaultListModel) list.getModel()).addElement(name);
+		list.setSelectedIndex(indice);
+		list.ensureIndexIsVisible(indice);
+		limpiarCampos();
+	}
 }
+

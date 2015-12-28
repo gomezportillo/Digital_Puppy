@@ -4,6 +4,11 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * Esta clase sirve para añadir a lso JFileChooser un filtro de 
+ * archivos.  Por ejemplo, este solo dejara seleccionar archivos 
+ * con extension png, jpeg o jpg (imagenes) 
+ */
 public class ImageFilter extends FileFilter {
 
 	@Override

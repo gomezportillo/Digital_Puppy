@@ -1,2 +1,2 @@
 # Digital_Puppy
-Project developed for the Computer-Human Interaction subject
+Final project developed for the Computer-Human Interaction subject
