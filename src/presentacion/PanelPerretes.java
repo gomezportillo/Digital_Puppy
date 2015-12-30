@@ -7,7 +7,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -20,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
@@ -41,13 +40,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class PanelPerros extends JPanel {
+public class PanelPerretes extends JPanel {
 	private static final long serialVersionUID = -7518504297885688690L;
 	private JFrame frame;
 	private JButton btn_anadir;
 	private JPanel panel_datos;
 	private JScrollPane scrollPane_tabla;
-	private JEditorPane tb_comentarios;
+	private JTextArea tb_comentarios;
 	private JButton bton_borrar;
 	private JButton btn_actualizar;
 	private JPanel panel_foto;
@@ -69,14 +68,13 @@ public class PanelPerros extends JPanel {
 	private JCheckBox cb_peligroso;
 	private JCheckBox cb_esterilizado;
 	private JButton btnEliminarFoto;
+	private VentanaPrincipal vp;
 
-	/**
-	 * Create the panel.
-	 */
 
-	
-	public PanelPerros(JFrame frame) {
+	public PanelPerretes(JFrame frame, VentanaPrincipal ventanaPrincipal) {
 		this.frame = frame;
+		this.vp = ventanaPrincipal;
+
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{147, 150, 0};
 		gridBagLayout.rowHeights = new int[]{331, 32, 0};
@@ -322,7 +320,7 @@ public class PanelPerros extends JPanel {
 					panel_datos.add(btn_actualizar, gbc_btn_actualizar);
 				}
 				{
-					tb_comentarios = new JEditorPane();
+					tb_comentarios = new JTextArea();
 					tb_comentarios.setBorder(new TitledBorder(null, "Comentarios", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 					GridBagConstraints gbc_tb_comentarios = new GridBagConstraints();
 					gbc_tb_comentarios.gridwidth = 2;
@@ -341,7 +339,6 @@ public class PanelPerros extends JPanel {
 		}
 
 		cargarTodosPerretes();
-
 	}
 
 	/**
@@ -372,7 +369,6 @@ public class PanelPerros extends JPanel {
 	public void cargarPerrete(String nombreArchivo) {
 		limpiarCampos();
 		File file = new File("data/perretes/" + nombreArchivo);
-		System.out.println(file.getAbsolutePath());
 
 
 		try{
@@ -386,9 +382,11 @@ public class PanelPerros extends JPanel {
 			if (br.readLine().contains("true")) cb_esterilizado.setSelected(true);
 			cb_estado.setSelectedIndex(new Integer(br.readLine()));
 			lblFoto.setIcon (new ImageIcon (br.readLine()));
+			String txt = null;
+			while((txt = br.readLine()) != null) tb_comentarios.append(txt+'\n');
 
 			br.close();
-
+			vp.lblInfo.setText("Cargado "+ file.getAbsolutePath());
 		} catch (IOException ioe){
 			//System.out.println(ioe);
 		}
@@ -398,13 +396,14 @@ public class PanelPerros extends JPanel {
 	 * Vacia todos los campos del panel 
 	 */
 	public void limpiarCampos() {
-		tf_nombre.setText("");
+		tf_nombre.setText(null);
 		sp_edad.setValue(0);
-		tf_raza.setText("");
+		tf_raza.setText(null);
 		cb_peligroso.setSelected(false);
 		cb_esterilizado.setSelected(false);
 		cb_estado.setSelectedIndex(-1);
 		lblFoto.setIcon(null);
+		tb_comentarios.setText(null);
 	}
 
 	/**
@@ -419,7 +418,7 @@ public class PanelPerros extends JPanel {
 				anadirPerreteALista(nombre);
 				tf_nombre.setText(nombre);
 			}
-			else if(nombre != null) JOptionPane.showConfirmDialog(frame, "Seleccione un nombre valido", "Guardar", JOptionPane.WARNING_MESSAGE);
+			else if(nombre != null) JOptionPane.showMessageDialog(frame, "Seleccione un nombre valido", "Guardar", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -466,20 +465,33 @@ public class PanelPerros extends JPanel {
 					lblFoto.getIcon() +"\r\n"+
 					tb_comentarios.getText();
 			//System.out.println(stringToSave);
+
 			int reply = JOptionPane.showConfirmDialog(frame, "¿Seguro que quiere guardar?", "Guardar", JOptionPane.YES_NO_OPTION);
 
 			if (reply == JOptionPane.YES_OPTION) {
-				File fileName = new File("data/perretes/" + nombrePerrete + ".perrete");
-				BufferedWriter outFile;
+				File file = new File("data/perretes/" + nombrePerrete + ".perrete");
+
 				try {
-					outFile = new BufferedWriter(new FileWriter(fileName));
-					outFile.write(stringToSave);
-					outFile.close();
+					FileWriter fw = new FileWriter (file, false);
+					fw.write(stringToSave);
+					fw.close();
+					vp.lblInfo.setText("Guardado "+ file.getAbsolutePath());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(frame, "Error guardando el archivo. Reinicie el programa y vuelva a intentarlo", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+
+				/**
+				 * File file = new File("data/perretes/" + nombrePerrete + ".perrete");
+				try {
+					FileWriter fw = new FileWriter(file);
+					fw.write(stringToSave);
+					fw.close();
+					vp.lblInfo.setText("Guardado "+ file.getAbsolutePath());
 					JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente", "Guardar", JOptionPane.INFORMATION_MESSAGE);
 				} catch (IOException e1) {
 					System.out.println("Error guardando el archivo. Reinicie el programa y vuelva a intentarlo");
-				}
-			}	else{
+				}*/
+			} else {
 				System.out.println("Guardado cancelado por el usuario");
 			}
 		}
@@ -517,7 +529,7 @@ public class PanelPerros extends JPanel {
 			String perreteSeleccionado = null;
 			try{
 				perreteSeleccionado = list.getModel().getElementAt(list.getSelectedIndex()).toString();
-				
+
 			}catch(Exception e1) { //se ralla con los index cuando se borra un elemento de la lista
 				perreteSeleccionado = list.getModel().getElementAt(0).toString();
 				list.setSelectedIndex(0);
