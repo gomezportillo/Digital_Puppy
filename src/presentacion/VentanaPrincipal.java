@@ -100,6 +100,10 @@ public class VentanaPrincipal {
 			tabbedPane.addChangeListener(new TabbedPaneChangeListener());
 			frmDigitalPuppy.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 			{
+				pnl_perros = new PanelPerretes(frmDigitalPuppy, this);
+				tabbedPane.addTab("Perros", null, pnl_perros, null);
+			}
+			{
 				pnl_voluntarios = new JPanel();
 				tabbedPane.addTab("Voluntarios", null, pnl_voluntarios, null);
 			}
@@ -122,10 +126,6 @@ public class VentanaPrincipal {
 				pnl_perrera.getAreaDibujo().setForeground(Color.WHITE);
 				tabbedPane.addTab("Perrera", null, pnl_perrera, null);
 			}
-			{
-				pnl_perros = new PanelPerretes(frmDigitalPuppy, this);
-				tabbedPane.addTab("Perros", null, pnl_perros, null);
-			}
 		}	
 		{
 			menuBar = new JMenuBar();
@@ -139,6 +139,7 @@ public class VentanaPrincipal {
 				menuBar.add(mnArchivo);
 				{
 					mntmSalir = new JMenuItem("Salir");
+					mntmSalir.addActionListener(new MntmSalirActionListener());
 					mnArchivo.add(mntmSalir);
 				}
 			}
@@ -308,6 +309,12 @@ public class VentanaPrincipal {
 		public void mouseMoved(MouseEvent arg0) {
 			pnl_perrera.modo = 0;
 			frmDigitalPuppy.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+	private class MntmSalirActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			frmDigitalPuppy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frmDigitalPuppy.dispose();		
 		}
 	}
 }
