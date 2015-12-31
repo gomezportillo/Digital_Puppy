@@ -100,10 +100,6 @@ public class VentanaPrincipal {
 			tabbedPane.addChangeListener(new TabbedPaneChangeListener());
 			frmDigitalPuppy.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 			{
-				pnl_perros = new PanelPerretes(frmDigitalPuppy, this);
-				tabbedPane.addTab("Perros", null, pnl_perros, null);
-			}
-			{
 				pnl_voluntarios = new JPanel();
 				tabbedPane.addTab("Voluntarios", null, pnl_voluntarios, null);
 			}
@@ -125,6 +121,10 @@ public class VentanaPrincipal {
 				pnl_perrera.getAreaDibujo().setOpaque(true);
 				pnl_perrera.getAreaDibujo().setForeground(Color.WHITE);
 				tabbedPane.addTab("Perrera", null, pnl_perrera, null);
+			}
+			{
+				pnl_perros = new PanelPerretes(frmDigitalPuppy, this);
+				tabbedPane.addTab("Perros", null, pnl_perros, null);
 			}
 		}	
 		{

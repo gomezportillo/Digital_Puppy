@@ -182,7 +182,7 @@ public class PanelPerretes extends JPanel {
 					panel_datos.add(panel_info, gbc_panel_info);
 					GridBagLayout gbl_panel_info = new GridBagLayout();
 					gbl_panel_info.columnWidths = new int[]{82, 0, 0};
-					gbl_panel_info.rowHeights = new int[]{0, 37, 52, 51, 59, 92, 0};
+					gbl_panel_info.rowHeights = new int[] {0, 40, 40, 40, 40, 40, 0};
 					gbl_panel_info.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 					gbl_panel_info.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 					panel_info.setLayout(gbl_panel_info);
