@@ -104,7 +104,7 @@ public class VentanaPrincipal {
 				tabbedPane.addTab("Perros", null, pnl_perros, null);
 			}
 			{
-				pnl_voluntarios = new JPanel();
+				pnl_voluntarios = new PanelVoluntarios(frmDigitalPuppy, this);
 				tabbedPane.addTab("Voluntarios", null, pnl_voluntarios, null);
 			}
 			{

@@ -13,12 +13,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,9 +36,10 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.SpinnerListModel;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class PanelPerretes extends JPanel {
+public class PanelVoluntarios extends JPanel {
 	private static final long serialVersionUID = -7518504297885688690L;
 	private JFrame frame;
 	private JButton btn_anadir;
@@ -55,23 +54,23 @@ public class PanelPerretes extends JPanel {
 	private JScrollPane scrollPane_1;
 	private JLabel lblFoto;
 	private JLabel lblNombre;
-	private JLabel lblNewLabel;
-	private JLabel lblRaza;
-	private JLabel lblPeligroso;
-	private JLabel lblNewLabel_1;
-	private JLabel lblEstado;
+	private JLabel lblEdad;
+	private JLabel lblDireccion;
+	private JLabel lblTelefono;
+	private JLabel lblNIF;
+	private JLabel lbVeterinario;
 	private JTextField tf_nombre;
-	private JSpinner sp_edad;
-	private JComboBox cb_estado;
 	private JList list;
-	private JTextField tf_raza;
-	private JCheckBox cb_peligroso;
-	private JCheckBox cb_esterilizado;
+	private JTextField tf_direccion;
 	private JButton btnEliminarFoto;
 	private VentanaPrincipal vp;
+	private JTextField tf_telefono;
+	private JTextField tf_NIF;
+	private JCheckBox cb_veterinario;
+	private JSpinner sp_edad;
 
 
-	public PanelPerretes(JFrame frame, VentanaPrincipal ventanaPrincipal) {
+	public PanelVoluntarios(JFrame frame, VentanaPrincipal ventanaPrincipal) {
 		this.frame = frame;
 		this.vp = ventanaPrincipal;
 
@@ -82,11 +81,11 @@ public class PanelPerretes extends JPanel {
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		{
-			btn_anadir = new JButton("Añadir nuevo perrete");
+			btn_anadir = new JButton("A\u00C3\u00B1adir nuevo voluntario");
 			btn_anadir.addActionListener(new AnadirPerrete());
 			{
 				scrollPane_tabla = new JScrollPane();
-				scrollPane_tabla.setBorder(new TitledBorder(null, "Perretes", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				scrollPane_tabla.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Voluntarios", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				GridBagConstraints gbc_scrollPane_tabla = new GridBagConstraints();
 				gbc_scrollPane_tabla.insets = new Insets(0, 0, 5, 5);
 				gbc_scrollPane_tabla.fill = GridBagConstraints.BOTH;
@@ -110,7 +109,7 @@ public class PanelPerretes extends JPanel {
 				panel_datos = new JPanel();
 				panel_datos.setMaximumSize(new Dimension(1000, 1000));
 				panel_datos.setMinimumSize(new Dimension(200, 200));
-				panel_datos.setBorder(new TitledBorder(null, "Perrete", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				panel_datos.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Voluntario", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				GridBagConstraints gbc_panel_datos = new GridBagConstraints();
 				gbc_panel_datos.gridheight = 2;
 				gbc_panel_datos.fill = GridBagConstraints.BOTH;
@@ -182,9 +181,9 @@ public class PanelPerretes extends JPanel {
 					panel_datos.add(panel_info, gbc_panel_info);
 					GridBagLayout gbl_panel_info = new GridBagLayout();
 					gbl_panel_info.columnWidths = new int[]{82, 0, 0};
-					gbl_panel_info.rowHeights = new int[] {0, 40, 40, 40, 40, 40, 0};
+					gbl_panel_info.rowHeights = new int[] {0, 40, 40, 40, 40, 40, 0, 0};
 					gbl_panel_info.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-					gbl_panel_info.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+					gbl_panel_info.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 					panel_info.setLayout(gbl_panel_info);
 					{
 						lblNombre = new JLabel("Nombre");
@@ -197,6 +196,7 @@ public class PanelPerretes extends JPanel {
 					}
 					{
 						tf_nombre = new JTextField();
+						tf_nombre.setText(" ");
 						GridBagConstraints gbc_tf_nombre = new GridBagConstraints();
 						gbc_tf_nombre.insets = new Insets(0, 0, 5, 0);
 						gbc_tf_nombre.fill = GridBagConstraints.HORIZONTAL;
@@ -206,17 +206,18 @@ public class PanelPerretes extends JPanel {
 						tf_nombre.setColumns(10);
 					}
 					{
-						lblNewLabel = new JLabel("Edad");
-						GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-						gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
-						gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-						gbc_lblNewLabel.gridx = 0;
-						gbc_lblNewLabel.gridy = 1;
-						panel_info.add(lblNewLabel, gbc_lblNewLabel);
+						lblEdad = new JLabel("Edad");
+						GridBagConstraints gbc_lblEdad = new GridBagConstraints();
+						gbc_lblEdad.anchor = GridBagConstraints.WEST;
+						gbc_lblEdad.insets = new Insets(0, 0, 5, 5);
+						gbc_lblEdad.gridx = 0;
+						gbc_lblEdad.gridy = 1;
+						panel_info.add(lblEdad, gbc_lblEdad);
 					}
 					{
 						sp_edad = new JSpinner();
-						sp_edad.setModel(new SpinnerNumberModel(1, 1, 20, 1));
+						sp_edad.setToolTipText("1");
+						sp_edad.setModel(new SpinnerNumberModel(1, 0, 100, 1));
 						GridBagConstraints gbc_sp_edad = new GridBagConstraints();
 						gbc_sp_edad.anchor = GridBagConstraints.WEST;
 						gbc_sp_edad.insets = new Insets(0, 0, 5, 0);
@@ -225,83 +226,84 @@ public class PanelPerretes extends JPanel {
 						panel_info.add(sp_edad, gbc_sp_edad);
 					}
 					{
-						lblRaza = new JLabel("Raza");
-						GridBagConstraints gbc_lblRaza = new GridBagConstraints();
-						gbc_lblRaza.anchor = GridBagConstraints.WEST;
-						gbc_lblRaza.insets = new Insets(0, 0, 5, 5);
-						gbc_lblRaza.gridx = 0;
-						gbc_lblRaza.gridy = 2;
-						panel_info.add(lblRaza, gbc_lblRaza);
+						lblDireccion = new JLabel("Direccion");
+						GridBagConstraints gbc_lblDireccion = new GridBagConstraints();
+						gbc_lblDireccion.anchor = GridBagConstraints.WEST;
+						gbc_lblDireccion.insets = new Insets(0, 0, 5, 5);
+						gbc_lblDireccion.gridx = 0;
+						gbc_lblDireccion.gridy = 2;
+						panel_info.add(lblDireccion, gbc_lblDireccion);
 					}
 					{
-						tf_raza = new JTextField();
-						GridBagConstraints gbc_tf_raza = new GridBagConstraints();
-						gbc_tf_raza.insets = new Insets(0, 0, 5, 0);
-						gbc_tf_raza.fill = GridBagConstraints.HORIZONTAL;
-						gbc_tf_raza.gridx = 1;
-						gbc_tf_raza.gridy = 2;
-						panel_info.add(tf_raza, gbc_tf_raza);
-						tf_raza.setColumns(10);
+						tf_direccion = new JTextField();
+						GridBagConstraints gbc_tf_direccion = new GridBagConstraints();
+						gbc_tf_direccion.insets = new Insets(0, 0, 5, 0);
+						gbc_tf_direccion.fill = GridBagConstraints.HORIZONTAL;
+						gbc_tf_direccion.gridx = 1;
+						gbc_tf_direccion.gridy = 2;
+						panel_info.add(tf_direccion, gbc_tf_direccion);
+						tf_direccion.setColumns(10);
 					}
 					{
-						lblPeligroso = new JLabel("Peligroso");
-						GridBagConstraints gbc_lblPeligroso = new GridBagConstraints();
-						gbc_lblPeligroso.anchor = GridBagConstraints.WEST;
-						gbc_lblPeligroso.insets = new Insets(0, 0, 5, 5);
-						gbc_lblPeligroso.gridx = 0;
-						gbc_lblPeligroso.gridy = 3;
-						panel_info.add(lblPeligroso, gbc_lblPeligroso);
+						lblTelefono = new JLabel("Telefono");
+						GridBagConstraints gbc_lblTelefono = new GridBagConstraints();
+						gbc_lblTelefono.anchor = GridBagConstraints.WEST;
+						gbc_lblTelefono.insets = new Insets(0, 0, 5, 5);
+						gbc_lblTelefono.gridx = 0;
+						gbc_lblTelefono.gridy = 3;
+						panel_info.add(lblTelefono, gbc_lblTelefono);
 					}
 					{
-						cb_peligroso = new JCheckBox("");
-						GridBagConstraints gbc_cb_peligroso = new GridBagConstraints();
-						gbc_cb_peligroso.anchor = GridBagConstraints.WEST;
-						gbc_cb_peligroso.insets = new Insets(0, 0, 5, 0);
-						gbc_cb_peligroso.gridx = 1;
-						gbc_cb_peligroso.gridy = 3;
-						panel_info.add(cb_peligroso, gbc_cb_peligroso);
+						tf_telefono = new JTextField();
+						tf_telefono.setColumns(10);
+						GridBagConstraints gbc_tf_telefono = new GridBagConstraints();
+						gbc_tf_telefono.insets = new Insets(0, 0, 5, 0);
+						gbc_tf_telefono.fill = GridBagConstraints.HORIZONTAL;
+						gbc_tf_telefono.gridx = 1;
+						gbc_tf_telefono.gridy = 3;
+						panel_info.add(tf_telefono, gbc_tf_telefono);
 					}
 					{
-						lblNewLabel_1 = new JLabel("Esterilizado");
-						GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-						gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
-						gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-						gbc_lblNewLabel_1.gridx = 0;
-						gbc_lblNewLabel_1.gridy = 4;
-						panel_info.add(lblNewLabel_1, gbc_lblNewLabel_1);
+						lblNIF = new JLabel("NIF");
+						GridBagConstraints gbc_lblNIF = new GridBagConstraints();
+						gbc_lblNIF.anchor = GridBagConstraints.WEST;
+						gbc_lblNIF.insets = new Insets(0, 0, 5, 5);
+						gbc_lblNIF.gridx = 0;
+						gbc_lblNIF.gridy = 4;
+						panel_info.add(lblNIF, gbc_lblNIF);
 					}
 					{
-						cb_esterilizado = new JCheckBox("");
-						GridBagConstraints gbc_cb_esterilizado = new GridBagConstraints();
-						gbc_cb_esterilizado.anchor = GridBagConstraints.WEST;
-						gbc_cb_esterilizado.insets = new Insets(0, 0, 5, 0);
-						gbc_cb_esterilizado.gridx = 1;
-						gbc_cb_esterilizado.gridy = 4;
-						panel_info.add(cb_esterilizado, gbc_cb_esterilizado);
+						tf_NIF = new JTextField();
+						tf_NIF.setColumns(10);
+						GridBagConstraints gbc_tf_NIF = new GridBagConstraints();
+						gbc_tf_NIF.insets = new Insets(0, 0, 5, 0);
+						gbc_tf_NIF.fill = GridBagConstraints.HORIZONTAL;
+						gbc_tf_NIF.gridx = 1;
+						gbc_tf_NIF.gridy = 4;
+						panel_info.add(tf_NIF, gbc_tf_NIF);
 					}
 					{
-						lblEstado = new JLabel("Estado");
-						GridBagConstraints gbc_lblEstado = new GridBagConstraints();
-						gbc_lblEstado.anchor = GridBagConstraints.WEST;
-						gbc_lblEstado.insets = new Insets(0, 0, 0, 5);
-						gbc_lblEstado.gridx = 0;
-						gbc_lblEstado.gridy = 5;
-						panel_info.add(lblEstado, gbc_lblEstado);
+						lbVeterinario = new JLabel("Veterinari@");
+						GridBagConstraints gbc_lbVeterinario = new GridBagConstraints();
+						gbc_lbVeterinario.anchor = GridBagConstraints.WEST;
+						gbc_lbVeterinario.insets = new Insets(0, 0, 5, 5);
+						gbc_lbVeterinario.gridx = 0;
+						gbc_lbVeterinario.gridy = 5;
+						panel_info.add(lbVeterinario, gbc_lbVeterinario);
 					}
 					{
-						cb_estado = new JComboBox();
-						cb_estado.setModel(new DefaultComboBoxModel(new String[] {"En perrera", "Reservado", "Adoptado", "Perdido", "Fallecido"}));
-						GridBagConstraints gbc_cb_estado = new GridBagConstraints();
-						gbc_cb_estado.fill = GridBagConstraints.HORIZONTAL;
-						gbc_cb_estado.gridx = 1;
-						gbc_cb_estado.gridy = 5;
-						panel_info.add(cb_estado, gbc_cb_estado);
-						cb_estado.setSelectedIndex(0);
+						cb_veterinario = new JCheckBox("");
+						GridBagConstraints gbc_cb_veterinario = new GridBagConstraints();
+						gbc_cb_veterinario.anchor = GridBagConstraints.WEST;
+						gbc_cb_veterinario.insets = new Insets(0, 0, 5, 0);
+						gbc_cb_veterinario.gridx = 1;
+						gbc_cb_veterinario.gridy = 5;
+						panel_info.add(cb_veterinario, gbc_cb_veterinario);
 					}
 				}
 				{
-					bton_borrar = new JButton("Borrar perrete");
-					bton_borrar.addActionListener(new BorrarPerrete());
+					bton_borrar = new JButton("Borrar voluntario");
+					bton_borrar.addActionListener(new BorrarVoluntario());
 					GridBagConstraints gbc_bton_borrar = new GridBagConstraints();
 					gbc_bton_borrar.fill = GridBagConstraints.HORIZONTAL;
 					gbc_bton_borrar.insets = new Insets(0, 0, 5, 5);
@@ -311,7 +313,7 @@ public class PanelPerretes extends JPanel {
 				}
 				{
 					btn_actualizar = new JButton("Guardar cambios");
-					btn_actualizar.addActionListener(new GuardarPerrete());
+					btn_actualizar.addActionListener(new GuardarVoluntario());
 					GridBagConstraints gbc_btn_actualizar = new GridBagConstraints();
 					gbc_btn_actualizar.fill = GridBagConstraints.HORIZONTAL;
 					gbc_btn_actualizar.insets = new Insets(0, 0, 5, 0);
@@ -338,7 +340,7 @@ public class PanelPerretes extends JPanel {
 			add(btn_anadir, gbc_btn_anadir);
 		}
 
-		cargarTodosPerretes();
+		cargarTodosVoluntarios();
 	}
 
 	/**
@@ -347,18 +349,18 @@ public class PanelPerretes extends JPanel {
 	 *  Ojo, solo añade los nombres de los archivos. El unico archivo que abre 
 	 *  es el ultimo, que es el que muestra al iniciar la aplicacion.
 	 */
-	public void cargarTodosPerretes() {
-		File directorio = new File("data/perretes/");
+	public void cargarTodosVoluntarios() {
+		File directorio = new File("data/voluntarios/");
 		File[] archivosEnDirectorio = directorio.listFiles();
 		if (archivosEnDirectorio != null) {
 			String archivo = null;
 			for (File child : archivosEnDirectorio) {
 				archivo = child.getName();
-				String extension = archivo.substring(archivo.length() - 8, archivo.length());
-				if (extension.equals(".perrete"))
-					anadirPerreteALista(archivo.substring(0, archivo.length() - 8));
+				String extension = archivo.substring(archivo.length() -11 , archivo.length());
+				if (extension.equals(".voluntario"))
+					anadirVoluntarioALista(archivo.substring(0, archivo.length() - 11));
 			}
-			cargarPerrete(archivo);
+			cargarVoluntario(archivo);
 		}
 	}
 
@@ -366,10 +368,9 @@ public class PanelPerretes extends JPanel {
 	 * A partir del nombre de un archivo, lo abre y llena los campos del panel con los datos que tiene
 	 * @param nombrePerrete nombre del archivo
 	 */
-	public void cargarPerrete(String nombreArchivo) {
+	public void cargarVoluntario(String nombreArchivo) {
 		limpiarCampos();
-		File file = new File("data/perretes/" + nombreArchivo);
-
+		File file = new File("data/voluntarios/" + nombreArchivo);
 
 		try{
 			FileReader fr = new FileReader (file.getAbsolutePath());
@@ -377,10 +378,10 @@ public class PanelPerretes extends JPanel {
 
 			tf_nombre.setText(br.readLine());
 			sp_edad.setValue(new Integer(br.readLine()));
-			tf_raza.setText(br.readLine());
-			if (br.readLine().contains("true")) cb_peligroso.setSelected(true);
-			if (br.readLine().contains("true")) cb_esterilizado.setSelected(true);
-			cb_estado.setSelectedIndex(new Integer(br.readLine()));
+			tf_direccion.setText(br.readLine());
+			tf_telefono.setText(br.readLine());
+			tf_NIF.setText(br.readLine());
+			if (br.readLine().contains("true")) cb_veterinario.setSelected(true);
 			lblFoto.setIcon (new ImageIcon (br.readLine()));
 			String txt = null;
 			while((txt = br.readLine()) != null) tb_comentarios.append(txt+'\n');
@@ -389,6 +390,8 @@ public class PanelPerretes extends JPanel {
 			vp.lblInfo.setText("Cargado "+ file.getAbsolutePath());
 		} catch (IOException ioe){
 			//System.out.println(ioe);
+		} catch(NumberFormatException nume){
+			System.out.println("no problem");
 		}
 	}
 
@@ -398,10 +401,10 @@ public class PanelPerretes extends JPanel {
 	public void limpiarCampos() {
 		tf_nombre.setText(null);
 		sp_edad.setValue(1);
-		tf_raza.setText(null);
-		cb_peligroso.setSelected(false);
-		cb_esterilizado.setSelected(false);
-		cb_estado.setSelectedIndex(-1);
+		tf_direccion.setText(null);
+		tf_telefono.setText(null);
+		tf_NIF.setText(null);
+		cb_veterinario.setSelected(false);
 		lblFoto.setIcon(null);
 		tb_comentarios.setText(null);
 	}
@@ -412,10 +415,10 @@ public class PanelPerretes extends JPanel {
 	 */
 	private class AnadirPerrete implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			String nombre = JOptionPane.showInputDialog("Nombre del nuevo perrete");
+			String nombre = JOptionPane.showInputDialog("Nombre del nuevo voluntario");
 			if (nombre != null && nombre.length()>1){
 				System.out.println(nombre);
-				anadirPerreteALista(nombre);
+				anadirVoluntarioALista(nombre);
 				tf_nombre.setText(nombre);
 			}
 			else if(nombre != null) JOptionPane.showMessageDialog(frame, "Seleccione un nombre valido", "Guardar", JOptionPane.WARNING_MESSAGE);
@@ -425,7 +428,7 @@ public class PanelPerretes extends JPanel {
 	/**
 	 * Listener para el botón "Borrar perrete". Borra el archivo con su información y lo elimina de la Jlist
 	 */
-	private class BorrarPerrete implements ActionListener {
+	private class BorrarVoluntario implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			int index = list.getSelectedIndex();
 			String perreteSeleccionado = list.getModel().getElementAt(index).toString();
@@ -438,7 +441,7 @@ public class PanelPerretes extends JPanel {
 				((DefaultListModel)list.getModel()).removeElementAt(index);
 				System.out.println("2");
 				try{
-					File archivoPerrete = new File("data/perretes/" + perreteSeleccionado +".perrete");
+					File archivoPerrete = new File("data/voluntarios/" + perreteSeleccionado +".voluntario");
 					archivoPerrete.delete();
 				}catch(Exception e1){
 					//System.out.println(e1.toString());
@@ -452,16 +455,18 @@ public class PanelPerretes extends JPanel {
 	 * Listener para el boton "Guardar cambios". Guardamos todos los campos en texto plano 
 	 * en un archivo con extensión ".perrete" para luego cargarlos desde el programa.
 	 */
-	private class GuardarPerrete implements ActionListener {
+	private class GuardarVoluntario implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String nombrePerrete = tf_nombre.getText().equals("") ? "Perrete"+(new Random()).nextInt(998) : tf_nombre.getText();
-			String razaPerrete = tf_raza.getText().equals("") ? "Mestizo" : tf_raza.getText();
-			String stringToSave = 	nombrePerrete +"\r\n"+
+			String nombre = tf_nombre.getText().equals("") ? "Voluntario"+(new Random()).nextInt(998) : tf_nombre.getText();
+			String direccion = tf_direccion.getText().equals("") ? "Direccion" : tf_direccion.getText();
+			String telefono = tf_telefono.getText().equals("") ? "Telefono" : tf_telefono.getText();
+			String nif = tf_NIF.getText().equals("") ? "NIF" : tf_NIF.getText();
+			String stringToSave = 	nombre +"\r\n"+
 					sp_edad.getValue() +"\r\n"+
-					razaPerrete +"\r\n"+
-					cb_peligroso.isSelected() +"\r\n"+
-					cb_esterilizado.isSelected() +"\r\n"+
-					cb_estado.getSelectedIndex() +"\r\n"+
+					direccion +"\r\n"+
+					telefono +"\r\n"+
+					nif +"\r\n"+
+					cb_veterinario.isSelected() +"\r\n"+
 					lblFoto.getIcon() +"\r\n"+
 					tb_comentarios.getText();
 			//System.out.println(stringToSave);
@@ -469,7 +474,7 @@ public class PanelPerretes extends JPanel {
 			int reply = JOptionPane.showConfirmDialog(frame, "¿Seguro que quiere guardar?", "Guardar", JOptionPane.YES_NO_OPTION);
 
 			if (reply == JOptionPane.YES_OPTION) {
-				File file = new File("data/perretes/" + nombrePerrete + ".perrete");
+				File file = new File("data/voluntarios/" + nombre + ".voluntario");
 
 				try {
 					FileWriter fw = new FileWriter (file, false);
@@ -526,16 +531,16 @@ public class PanelPerretes extends JPanel {
 	 */
 	private class ListListSelectionListener implements ListSelectionListener { 
 		public void valueChanged(ListSelectionEvent arg0) {
-			String perreteSeleccionado = null;
+			String voluntarioSeleccionado = null;
 			try{
-				perreteSeleccionado = list.getModel().getElementAt(list.getSelectedIndex()).toString();
+				voluntarioSeleccionado = list.getModel().getElementAt(list.getSelectedIndex()).toString();
 
 			}catch(Exception e1) { //se ralla con los index cuando se borra un elemento de la lista
-				perreteSeleccionado = list.getModel().getElementAt(0).toString();
+				voluntarioSeleccionado = list.getModel().getElementAt(0).toString();
 				list.setSelectedIndex(0);
 			}
 			if (!list.getValueIsAdjusting())
-				cargarPerrete(perreteSeleccionado+".perrete");
+				cargarVoluntario(voluntarioSeleccionado+".voluntario");
 		}
 	}
 
@@ -543,7 +548,7 @@ public class PanelPerretes extends JPanel {
 	 * Este metodo será ejecutado cuando queramos añadir un nuevo elemento a la lista
 	 * @param name String con el elemento que queremos añadir
 	 */
-	public void anadirPerreteALista(String name) {
+	public void anadirVoluntarioALista(String name) {
 		int indice = list.getModel().getSize();
 		((DefaultListModel) list.getModel()).addElement(name);
 		list.setSelectedIndex(indice);
