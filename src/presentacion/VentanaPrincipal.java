@@ -26,10 +26,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.Toolkit;
 
 public class VentanaPrincipal {
 
 	private JFrame frmDigitalPuppy;
+	private JFrame ventanaAcercaDe;
 	JLabel lblInfo;
 	private JTabbedPane tabbedPane;
 	private PanelPerretes pnl_perros;
@@ -60,6 +62,8 @@ public class VentanaPrincipal {
 	private JRadioButtonMenuItem rdbtnmntmComicSans;
 	private JRadioButtonMenuItem mntmCourierNew;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JMenuItem mntmLicencia;
+	public VentanaLicencia ventanaLicencia;
 
 	/**
 	 * Launch the application.
@@ -92,7 +96,7 @@ public class VentanaPrincipal {
 		frmDigitalPuppy.setTitle("Digital Puppy");
 		frmDigitalPuppy.setBounds(100, 100, 751, 566);
 		frmDigitalPuppy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmDigitalPuppy.setIconImage(new ImageIcon("data/icons/icono.png").getImage());
+		frmDigitalPuppy.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/iconos/icono.png")));
 		{
 			lblInfo = new JLabel("Informacion");
 			frmDigitalPuppy.getContentPane().add(lblInfo, BorderLayout.SOUTH);
@@ -229,6 +233,11 @@ public class VentanaPrincipal {
 				{
 					mntmAcercaDe = new JMenuItem("Acerca de...");
 					mntmAcercaDe.addActionListener(new MntmAcercaDeActionListener());
+					{
+						mntmLicencia = new JMenuItem("Licencia");
+						mntmLicencia.addActionListener(new MntmLicenciaActionListener());
+						mnAyuda.add(mntmLicencia);
+					}
 					mnAyuda.add(mntmAcercaDe);
 				}
 			}
@@ -273,12 +282,9 @@ public class VentanaPrincipal {
 	}
 	private class MntmAcercaDeActionListener implements ActionListener { //Acerca de...
 		public void actionPerformed(ActionEvent e) {
-			String mensaje =  "Diego Molero Marín\nDiego.Molero@alu.uclm.es \n\n"
-					+ "Pedro Manuel Gómez-Portillo López\nPedroManuel.GomezPortillo@alu.uclm.es \n\n"
-					+ "<HTML>Click the <FONT color=\"#000099\"><U>link</U></FONT>"
-        + " to go to the Java website.</HTML>"; 
-
-			JOptionPane.showMessageDialog(frmDigitalPuppy, mensaje, "Desarrolladores", JOptionPane.PLAIN_MESSAGE);
+			ventanaAcercaDe = new VentanaAcercaDe();
+			ventanaAcercaDe.setVisible(true);
+			
 		}
 	}
 	private class RdbtnmntmTimesRomanActionListener implements ActionListener { //times roman
@@ -319,6 +325,12 @@ public class VentanaPrincipal {
 		public void actionPerformed(ActionEvent arg0) {
 			frmDigitalPuppy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frmDigitalPuppy.dispose();		
+		}
+	}
+	private class MntmLicenciaActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			ventanaLicencia = new VentanaLicencia();
+			ventanaLicencia.setVisible(true);
 		}
 	}
 }

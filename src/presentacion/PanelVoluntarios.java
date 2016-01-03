@@ -118,7 +118,7 @@ public class PanelVoluntarios extends JPanel {
 				GridBagLayout gbl_panel_datos = new GridBagLayout();
 				gbl_panel_datos.columnWidths = new int[] {186, 209};
 				gbl_panel_datos.rowHeights = new int[] {245, 47, 54};
-				gbl_panel_datos.columnWeights = new double[]{1.0, 1.0};
+				gbl_panel_datos.columnWeights = new double[]{0.0, 1.0};
 				gbl_panel_datos.rowWeights = new double[]{1.0, 0.0, 0.0};
 				panel_datos.setLayout(gbl_panel_datos);
 				{
