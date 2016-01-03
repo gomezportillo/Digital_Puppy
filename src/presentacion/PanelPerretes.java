@@ -68,12 +68,12 @@ public class PanelPerretes extends JPanel {
 	private JCheckBox cb_peligroso;
 	private JCheckBox cb_esterilizado;
 	private JButton btnEliminarFoto;
-	private VentanaPrincipal vp;
+	private VentanaPrincipal ventanaPrincipal;
 
 
 	public PanelPerretes(JFrame frame, VentanaPrincipal ventanaPrincipal) {
 		this.frame = frame;
-		this.vp = ventanaPrincipal;
+		this.ventanaPrincipal = ventanaPrincipal;
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{147, 150, 0};
@@ -184,7 +184,7 @@ public class PanelPerretes extends JPanel {
 					gbl_panel_info.columnWidths = new int[]{82, 0, 0};
 					gbl_panel_info.rowHeights = new int[] {0, 40, 40, 40, 40, 40, 0};
 					gbl_panel_info.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-					gbl_panel_info.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+					gbl_panel_info.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 					panel_info.setLayout(gbl_panel_info);
 					{
 						lblNombre = new JLabel("Nombre");
@@ -356,7 +356,7 @@ public class PanelPerretes extends JPanel {
 				archivo = child.getName();
 				String extension = archivo.substring(archivo.length() - 8, archivo.length());
 				if (extension.equals(".perrete"))
-					anadirPerreteALista(archivo.substring(0, archivo.length() - 8));
+					anadirPerreteALista(archivo.substring(0, archivo.length() - 8)); //coge el nombre evitando la extension
 			}
 			cargarPerrete(archivo);
 		}
@@ -367,10 +367,9 @@ public class PanelPerretes extends JPanel {
 	 * @param nombrePerrete nombre del archivo
 	 */
 	public void cargarPerrete(String nombreArchivo) {
-		limpiarCampos();
+		limpiarCampos(); //reinicia todos los campos
+		
 		File file = new File("data/perretes/" + nombreArchivo);
-
-
 		try{
 			FileReader fr = new FileReader (file.getAbsolutePath());
 			BufferedReader br = new BufferedReader(fr);
@@ -383,12 +382,12 @@ public class PanelPerretes extends JPanel {
 			cb_estado.setSelectedIndex(new Integer(br.readLine()));
 			lblFoto.setIcon (new ImageIcon (br.readLine()));
 			String txt = null;
-			while((txt = br.readLine()) != null) tb_comentarios.append(txt+'\n');
+			while((txt = br.readLine()) != null) tb_comentarios.append(txt+'\n'); //todo lo demás que encuentre lo añade como comentario
 
 			br.close();
-			vp.lblInfo.setText("Cargado "+ file.getAbsolutePath());
+			ventanaPrincipal.lblInfo.setText("Cargado "+ file.getAbsolutePath());
 		} catch (IOException ioe){
-			//System.out.println(ioe);
+			//System.out.println(ioe); 
 		}
 	}
 
@@ -434,9 +433,8 @@ public class PanelPerretes extends JPanel {
 
 			if (reply == JOptionPane.YES_OPTION) {
 				limpiarCampos();
-				System.out.println("1");
 				((DefaultListModel)list.getModel()).removeElementAt(index);
-				System.out.println("2");
+
 				try{
 					File archivoPerrete = new File("data/perretes/" + perreteSeleccionado +".perrete");
 					archivoPerrete.delete();
@@ -475,22 +473,11 @@ public class PanelPerretes extends JPanel {
 					FileWriter fw = new FileWriter (file, false);
 					fw.write(stringToSave);
 					fw.close();
-					vp.lblInfo.setText("Guardado "+ file.getAbsolutePath());
+					ventanaPrincipal.lblInfo.setText("Guardado "+ file.getAbsolutePath());
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(frame, "Error guardando el archivo. Reinicie el programa y vuelva a intentarlo", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
-				/**
-				 * File file = new File("data/perretes/" + nombrePerrete + ".perrete");
-				try {
-					FileWriter fw = new FileWriter(file);
-					fw.write(stringToSave);
-					fw.close();
-					vp.lblInfo.setText("Guardado "+ file.getAbsolutePath());
-					JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente", "Guardar", JOptionPane.INFORMATION_MESSAGE);
-				} catch (IOException e1) {
-					System.out.println("Error guardando el archivo. Reinicie el programa y vuelva a intentarlo");
-				}*/
 			} else {
 				System.out.println("Guardado cancelado por el usuario");
 			}

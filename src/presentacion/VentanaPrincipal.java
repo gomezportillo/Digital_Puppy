@@ -1,13 +1,7 @@
 package presentacion;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
@@ -18,6 +12,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+
+import java.awt.EventQueue;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -35,7 +36,7 @@ public class VentanaPrincipal {
 	private JPanel pnl_voluntarios;
 	private JPanel pnl_perdidos;
 	private JPanel pnl_socios;
-	private JPanel pnl_cuentas;
+	private PanelCuentas pnl_cuentas;
 	private PanelPerrera pnl_perrera;
 	private JMenuBar menuBar;
 	private JMenu mnArchivo;
@@ -91,6 +92,7 @@ public class VentanaPrincipal {
 		frmDigitalPuppy.setTitle("Digital Puppy");
 		frmDigitalPuppy.setBounds(100, 100, 751, 566);
 		frmDigitalPuppy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmDigitalPuppy.setIconImage(new ImageIcon("data/icons/icono.png").getImage());
 		{
 			lblInfo = new JLabel("Informacion");
 			frmDigitalPuppy.getContentPane().add(lblInfo, BorderLayout.SOUTH);
@@ -116,7 +118,7 @@ public class VentanaPrincipal {
 				tabbedPane.addTab("Socios", null, pnl_socios, null);
 			}
 			{
-				pnl_cuentas = new JPanel();
+				pnl_cuentas = new PanelCuentas(frmDigitalPuppy, this);
 				tabbedPane.addTab("Cuentas", null, pnl_cuentas, null);
 			}
 			{
@@ -271,8 +273,10 @@ public class VentanaPrincipal {
 	}
 	private class MntmAcercaDeActionListener implements ActionListener { //Acerca de...
 		public void actionPerformed(ActionEvent e) {
-			String mensaje =  "Pedro Manuel Gómez-Portillo López\nPedroManuel.GomezPortillo@alu.uclm.es \n\n"
-					+ "Diego Molero Marín\nDiego.Molero@alu.uclm.es \n\n"; 
+			String mensaje =  "Diego Molero Marín\nDiego.Molero@alu.uclm.es \n\n"
+					+ "Pedro Manuel Gómez-Portillo López\nPedroManuel.GomezPortillo@alu.uclm.es \n\n"
+					+ "<HTML>Click the <FONT color=\"#000099\"><U>link</U></FONT>"
+        + " to go to the Java website.</HTML>"; 
 
 			JOptionPane.showMessageDialog(frmDigitalPuppy, mensaje, "Desarrolladores", JOptionPane.PLAIN_MESSAGE);
 		}

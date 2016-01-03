@@ -36,7 +36,6 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.SpinnerListModel;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PanelVoluntarios extends JPanel {
@@ -81,7 +80,7 @@ public class PanelVoluntarios extends JPanel {
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		{
-			btn_anadir = new JButton("A\u00C3\u00B1adir nuevo voluntario");
+			btn_anadir = new JButton("Añadir nuevo voluntario");
 			btn_anadir.addActionListener(new AnadirPerrete());
 			{
 				scrollPane_tabla = new JScrollPane();
@@ -181,9 +180,9 @@ public class PanelVoluntarios extends JPanel {
 					panel_datos.add(panel_info, gbc_panel_info);
 					GridBagLayout gbl_panel_info = new GridBagLayout();
 					gbl_panel_info.columnWidths = new int[]{82, 0, 0};
-					gbl_panel_info.rowHeights = new int[] {0, 40, 40, 40, 40, 40, 0, 0};
+					gbl_panel_info.rowHeights = new int[] {0, 40, 40, 40, 40, 40, 0};
 					gbl_panel_info.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-					gbl_panel_info.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+					gbl_panel_info.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 					panel_info.setLayout(gbl_panel_info);
 					{
 						lblNombre = new JLabel("Nombre");
@@ -286,7 +285,7 @@ public class PanelVoluntarios extends JPanel {
 						lbVeterinario = new JLabel("Veterinari@");
 						GridBagConstraints gbc_lbVeterinario = new GridBagConstraints();
 						gbc_lbVeterinario.anchor = GridBagConstraints.WEST;
-						gbc_lbVeterinario.insets = new Insets(0, 0, 5, 5);
+						gbc_lbVeterinario.insets = new Insets(0, 0, 0, 5);
 						gbc_lbVeterinario.gridx = 0;
 						gbc_lbVeterinario.gridy = 5;
 						panel_info.add(lbVeterinario, gbc_lbVeterinario);
@@ -295,7 +294,6 @@ public class PanelVoluntarios extends JPanel {
 						cb_veterinario = new JCheckBox("");
 						GridBagConstraints gbc_cb_veterinario = new GridBagConstraints();
 						gbc_cb_veterinario.anchor = GridBagConstraints.WEST;
-						gbc_cb_veterinario.insets = new Insets(0, 0, 5, 0);
 						gbc_cb_veterinario.gridx = 1;
 						gbc_cb_veterinario.gridy = 5;
 						panel_info.add(cb_veterinario, gbc_cb_veterinario);
@@ -344,7 +342,7 @@ public class PanelVoluntarios extends JPanel {
 	}
 
 	/**
-	 *  Abre el directorio data/perretes/ donde estan los archivos .perrete de 
+	 *  Abre el directorio data/voluntarios/ donde estan los archivos .perrete de 
 	 *  todos los perros de la perrera y añade los nombres uno a uno a la JList.
 	 *  Ojo, solo añade los nombres de los archivos. El unico archivo que abre 
 	 *  es el ultimo, que es el que muestra al iniciar la aplicacion.
@@ -437,9 +435,8 @@ public class PanelVoluntarios extends JPanel {
 
 			if (reply == JOptionPane.YES_OPTION) {
 				limpiarCampos();
-				System.out.println("1");
 				((DefaultListModel)list.getModel()).removeElementAt(index);
-				System.out.println("2");
+		
 				try{
 					File archivoPerrete = new File("data/voluntarios/" + perreteSeleccionado +".voluntario");
 					archivoPerrete.delete();
@@ -458,9 +455,9 @@ public class PanelVoluntarios extends JPanel {
 	private class GuardarVoluntario implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String nombre = tf_nombre.getText().equals("") ? "Voluntario"+(new Random()).nextInt(998) : tf_nombre.getText();
-			String direccion = tf_direccion.getText().equals("") ? "Direccion" : tf_direccion.getText();
-			String telefono = tf_telefono.getText().equals("") ? "Telefono" : tf_telefono.getText();
-			String nif = tf_NIF.getText().equals("") ? "NIF" : tf_NIF.getText();
+			String direccion = tf_direccion.getText().equals("") ? "No encontrada" : tf_direccion.getText();
+			String telefono = tf_telefono.getText().equals("") ? "No encontrada" : tf_telefono.getText();
+			String nif = tf_NIF.getText().equals("") ? "No encontrada" : tf_NIF.getText();
 			String stringToSave = 	nombre +"\r\n"+
 					sp_edad.getValue() +"\r\n"+
 					direccion +"\r\n"+
@@ -485,17 +482,6 @@ public class PanelVoluntarios extends JPanel {
 					JOptionPane.showMessageDialog(frame, "Error guardando el archivo. Reinicie el programa y vuelva a intentarlo", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
-				/**
-				 * File file = new File("data/perretes/" + nombrePerrete + ".perrete");
-				try {
-					FileWriter fw = new FileWriter(file);
-					fw.write(stringToSave);
-					fw.close();
-					vp.lblInfo.setText("Guardado "+ file.getAbsolutePath());
-					JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente", "Guardar", JOptionPane.INFORMATION_MESSAGE);
-				} catch (IOException e1) {
-					System.out.println("Error guardando el archivo. Reinicie el programa y vuelva a intentarlo");
-				}*/
 			} else {
 				System.out.println("Guardado cancelado por el usuario");
 			}
