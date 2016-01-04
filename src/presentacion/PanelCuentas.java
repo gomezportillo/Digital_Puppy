@@ -140,7 +140,7 @@ public class PanelCuentas extends JPanel {
 					panel_datos.setLayout(gbl_panel_datos);
 					{
 						pnl_anadir = new JPanel();
-						pnl_anadir.setBorder(new TitledBorder(null, "A\u00F1adir ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+						pnl_anadir.setBorder(new TitledBorder(null, "Añadir ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 						GridBagConstraints gbc_pnl_anadir = new GridBagConstraints();
 						gbc_pnl_anadir.insets = new Insets(0, 0, 5, 0);
 						gbc_pnl_anadir.fill = GridBagConstraints.BOTH;
@@ -281,10 +281,10 @@ public class PanelCuentas extends JPanel {
 				}
 			}
 		}
-		cargarDatosFinancieros();
+		cargarDatosfromCSV();
 	}
 
-	public void cargarDatosFinancieros() {
+	public void cargarDatosfromCSV() {
 		File file = new File(this.nombreArchivoCuentas);
 		try{
 			FileReader fr = new FileReader (file.getAbsolutePath());
@@ -353,6 +353,10 @@ public class PanelCuentas extends JPanel {
 			String mensaje = "¿Seguro que quiere eliminar la entrada \""+fila+"\"?";
 			int reply = JOptionPane.showConfirmDialog(frame, mensaje, "Eliminar", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
+				String [] filaS = modeloTabla.getRow(filaSeleccionada);
+				double cantidadBorrada = Double.parseDouble(filaS[1]);
+				double cantidadActual = Double.parseDouble(lbl_balance.getText().substring(0, lbl_balance.getText().length()-2));
+				lbl_balance.setText(String.valueOf(cantidadActual-cantidadBorrada)+" €");
 				modeloTabla.eliminaFila(filaSeleccionada);
 				modeloTabla.fireTableDataChanged();
 			}
