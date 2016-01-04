@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings({ "rawtypes", "serial" })
 class ModeloTablaCuentas extends AbstractTableModel
 {
-	private String [] nombreColumnas= { "Razón", "Cantidad (€)", "Fecha (d/M/A)"};
+	private String [] nombreColumnas= { Messages.getString("ModeloTablaCuentas.0"), Messages.getString("ModeloTablaCuentas.1"), Messages.getString("ModeloTablaCuentas.2")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 
 	private Vector<String[]> datos = new Vector<String[]>();
@@ -54,7 +54,7 @@ class ModeloTablaCuentas extends AbstractTableModel
 	public String getRowtoString(int row) {
 		String [] fila = this.getRow(row);
 
-		return fila[0] + " / " + fila[1] +"€ / " + fila[2];		
+		return fila[0] + " / " + fila[1] +"€ / " + fila[2];		 //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -63,9 +63,9 @@ class ModeloTablaCuentas extends AbstractTableModel
 	 * @return
 	 */
 	public String getTableToCSV(){
-		String resultado = "";
+		String resultado = ""; //$NON-NLS-1$
 		char separador = ';';
-		for (String[] fila : datos) resultado+=fila[0]+separador+fila[1]+separador+fila[2]+"\r\n";
+		for (String[] fila : datos) resultado+=fila[0]+separador+fila[1]+separador+fila[2]+"\r\n"; //$NON-NLS-1$
 		return resultado;
 	}
 }

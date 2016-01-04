@@ -33,24 +33,16 @@ import java.awt.Point;
 
 public class VentanaLicencia extends JFrame { 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7518504297885688690L;
 	private JScrollPane contentPane;
 	private JLabel label;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaLicencia frame = new VentanaLicencia();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
