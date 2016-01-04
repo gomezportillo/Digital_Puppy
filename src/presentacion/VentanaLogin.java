@@ -72,7 +72,7 @@ public class VentanaLogin extends JFrame{
 	 */
 	private void initialize() {
 		frmLogin = new JFrame();
-		frmLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaLogin.class.getResource("/iconos/icono-small.png")));
+		frmLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaLogin.class.getResource("/iconos/icono-small.png"))); //$NON-NLS-1$
 		frmLogin.setTitle(Messages.getString("VentanaLogin.frmLogin.title")); //$NON-NLS-1$
 		frmLogin.setResizable(false);
 		frmLogin.setBounds(100, 100, 650, 265);
@@ -112,8 +112,8 @@ public class VentanaLogin extends JFrame{
 			textField.setColumns(10);
 		}
 		{
-			btn_español = new JButton(Messages.getString("VentanaLogin.2"));
-			btn_español.setIcon(new ImageIcon(VentanaLogin.class.getResource("/iconos/banderaEsp.gif")));
+			btn_español = new JButton(Messages.getString("VentanaLogin.2")); //$NON-NLS-1$
+			btn_español.setIcon(new ImageIcon(VentanaLogin.class.getResource("/iconos/banderaEsp.gif"))); //$NON-NLS-1$
 			btn_español.setEnabled(false);
 			btn_español.addActionListener(new BtnNewButton_1ActionListener());
 			GridBagConstraints gbc_btn_español = new GridBagConstraints();
@@ -123,8 +123,8 @@ public class VentanaLogin extends JFrame{
 			frmLogin.getContentPane().add(btn_español, gbc_btn_español);
 		}
 		{
-			btn_ingles = new JButton(Messages.getString("VentanaLogin.3"));
-			btn_ingles.setIcon(new ImageIcon(VentanaLogin.class.getResource("/iconos/banderaIng.gif")));
+			btn_ingles = new JButton(Messages.getString("VentanaLogin.3")); //$NON-NLS-1$
+			btn_ingles.setIcon(new ImageIcon(VentanaLogin.class.getResource("/iconos/banderaIng.gif"))); //$NON-NLS-1$
 			btn_ingles.addActionListener(new BtnNewButtonActionListener());
 			GridBagConstraints gbc_btn_ingles = new GridBagConstraints();
 			gbc_btn_ingles.insets = new Insets(0, 0, 5, 5);
@@ -163,7 +163,7 @@ public class VentanaLogin extends JFrame{
 		}
 		{
 			lblInfo_user = new JLabel(Messages.getString("VentanaLogin.6")); //$NON-NLS-1$
-			lblInfo_user.setIcon(new ImageIcon(VentanaLogin.class.getResource("/iconos/icono-small.png")));
+			lblInfo_user.setIcon(new ImageIcon(VentanaLogin.class.getResource("/iconos/icono-small.png"))); //$NON-NLS-1$
 			lblInfo_user.setFont(new Font("Microsoft YaHei UI", Font.ITALIC, 14)); //$NON-NLS-1$
 			GridBagConstraints gbc_lblInfo_user = new GridBagConstraints();
 			gbc_lblInfo_user.gridwidth = 3;
@@ -178,23 +178,23 @@ public class VentanaLogin extends JFrame{
 	private class BtnNewButton_2ActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			String nombre = textField.getText(); 
-			if  (nombre.equals("admin") && passwordField.getText().equals("admin")) {
+			if  (nombre.equals("admin") && passwordField.getText().equals("admin")) { //$NON-NLS-1$ //$NON-NLS-2$
 
 				String ultima_conextion = cargarUltimaConextionYActualizar();
-				String mensaje = "Bienvenido "+nombre+". Su última conexión fue el "+ultima_conextion;
-				JOptionPane.showMessageDialog(frmLogin, mensaje, "Bienbenido", JOptionPane.INFORMATION_MESSAGE);
+				String mensaje = Messages.getString("VentanaLogin.14")+nombre+Messages.getString("VentanaLogin.15")+ultima_conextion; //$NON-NLS-1$ //$NON-NLS-2$
+				JOptionPane.showMessageDialog(frmLogin, mensaje, Messages.getString("VentanaLogin.16"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
 				ventanaPrincipal = new VentanaPrincipal();
 				frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frmLogin.dispose();	
 			}
 			else{
-				JOptionPane.showMessageDialog(frmLogin, "Usuario o contraseña no reconodidos", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(frmLogin, Messages.getString("VentanaLogin.17"), "Error", JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			}	
 		}
 	}
 
 	private String cargarUltimaConextionYActualizar() {
-		String filename = "data/login/ultimaconexion.txt";
+		String filename = "data/login/ultimaconexion.txt"; //$NON-NLS-1$
 		File file = new File(filename);
 		String u_c = null;
 		try{
@@ -202,7 +202,7 @@ public class VentanaLogin extends JFrame{
 			BufferedReader br = new BufferedReader(fr);
 			u_c = br.readLine();
 			
-			String[] mydate = (java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime())).split(" ");
+			String[] mydate = (java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime())).split(" "); //$NON-NLS-1$
 			String fecha = mydate[0];
 			FileWriter fw = new FileWriter (file, false);
 			fw.write(fecha);
@@ -216,7 +216,7 @@ public class VentanaLogin extends JFrame{
 
 	private class BtnNewButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			Messages.setIdioma("inglés");
+			Messages.setIdioma(Messages.getString("VentanaLogin.21")); //$NON-NLS-1$
 			VentanaLogin ventana = new VentanaLogin();
 			ventana.getFrame().setVisible(true);
 			frmLogin.dispose();
@@ -226,7 +226,7 @@ public class VentanaLogin extends JFrame{
 	}
 	private class BtnNewButton_1ActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Messages.setIdioma("español");
+			Messages.setIdioma(Messages.getString("VentanaLogin.22")); //$NON-NLS-1$
 			VentanaLogin ventana = new VentanaLogin();
 			ventana.getFrame().setVisible(true);
 			frmLogin.dispose();
