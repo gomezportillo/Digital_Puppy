@@ -80,7 +80,7 @@ public class PanelPerrera extends JPanel {
 		setLayout(gridBagLayout);
 		{
 			pnl_mapa = new JScrollPane();
-			pnl_mapa.setViewportBorder(new TitledBorder(null, "Mapa", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnl_mapa.setViewportBorder(new TitledBorder(null, Messages.getString("PanelPerrera.0"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 			GridBagConstraints gbc_pnl_mapa = new GridBagConstraints();
 			gbc_pnl_mapa.insets = new Insets(0, 0, 0, 5);
 			gbc_pnl_mapa.fill = GridBagConstraints.BOTH;
@@ -92,7 +92,7 @@ public class PanelPerrera extends JPanel {
 				areaDibujo.addMouseMotionListener(new AreaDibujoMouseMotionListener());
 				areaDibujo.addMouseListener(new AreaDibujoMouseListener());
 				areaDibujo.setHorizontalAlignment(SwingConstants.CENTER);
-				areaDibujo.setIcon(new ImageIcon("data/mapa/perrera.png"));
+				areaDibujo.setIcon(new ImageIcon("data/mapa/perrera.png")); //$NON-NLS-1$
 				pnl_mapa.setViewportView(areaDibujo);
 			}
 		}
@@ -101,7 +101,7 @@ public class PanelPerrera extends JPanel {
 		{
 			{
 				pnl_herramientas = new JPanel();
-				pnl_herramientas.setBorder(new TitledBorder(null, "Herramientas", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				pnl_herramientas.setBorder(new TitledBorder(null, Messages.getString("PanelPerrera.2"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 				GridBagConstraints gbc_pnl_herramientas = new GridBagConstraints();
 				gbc_pnl_herramientas.fill = GridBagConstraints.BOTH;
 				gbc_pnl_herramientas.gridx = 1;
@@ -114,7 +114,7 @@ public class PanelPerrera extends JPanel {
 				gbl_pnl_herramientas.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0};
 				pnl_herramientas.setLayout(gbl_pnl_herramientas);
 				{
-					btnPerrete = new JButton("Añadir perrete");
+					btnPerrete = new JButton(Messages.getString("PanelPerrera.3")); //$NON-NLS-1$
 					GridBagConstraints gbc_btnPerrete = new GridBagConstraints();
 					gbc_btnPerrete.fill = GridBagConstraints.BOTH;
 					gbc_btnPerrete.insets = new Insets(0, 0, 5, 0);
@@ -122,12 +122,12 @@ public class PanelPerrera extends JPanel {
 					gbc_btnPerrete.gridy = 0;
 					pnl_herramientas.add(btnPerrete, gbc_btnPerrete);
 					btnPerrete.addActionListener(new AnadirPerrete());
-					btnPerrete.setIcon(new ImageIcon("data/mapa/botones/perrete.png"));
+					btnPerrete.setIcon(new ImageIcon("data/mapa/botones/perrete.png")); //$NON-NLS-1$
 					btnPerrete.setVerticalTextPosition(SwingConstants.BOTTOM);
 					btnPerrete.setHorizontalTextPosition(SwingConstants.CENTER);
 					btnPerrete.setHorizontalTextPosition(JButton.CENTER);
 				}
-				bntRectangulo = new JButton("Añadir rectangulo");
+				bntRectangulo = new JButton(Messages.getString("PanelPerrera.5")); //$NON-NLS-1$
 				GridBagConstraints gbc_bntRectangulo = new GridBagConstraints();
 				gbc_bntRectangulo.fill = GridBagConstraints.BOTH;
 				gbc_bntRectangulo.insets = new Insets(0, 0, 5, 0);
@@ -135,12 +135,12 @@ public class PanelPerrera extends JPanel {
 				gbc_bntRectangulo.gridy = 1;
 				pnl_herramientas.add(bntRectangulo, gbc_bntRectangulo);
 				bntRectangulo.addActionListener(new AnadirRectangulo());
-				bntRectangulo.setIcon(new ImageIcon("data/mapa/botones/rectangulo.png"));
+				bntRectangulo.setIcon(new ImageIcon("data/mapa/botones/rectangulo.png")); //$NON-NLS-1$
 				bntRectangulo.setVerticalTextPosition(SwingConstants.BOTTOM);
 				bntRectangulo.setHorizontalTextPosition(SwingConstants.CENTER);
 				bntRectangulo.setHorizontalTextPosition(JButton.CENTER);
 				{
-					btnTexto = new JButton("Añadir texto");
+					btnTexto = new JButton(Messages.getString("PanelPerrera.7")); //$NON-NLS-1$
 					GridBagConstraints gbc_btnTexto = new GridBagConstraints();
 					gbc_btnTexto.fill = GridBagConstraints.BOTH;
 					gbc_btnTexto.insets = new Insets(0, 0, 5, 0);
@@ -148,19 +148,19 @@ public class PanelPerrera extends JPanel {
 					gbc_btnTexto.gridy = 2;
 					pnl_herramientas.add(btnTexto, gbc_btnTexto);
 					btnTexto.addActionListener(new AndirTexto());
-					btnTexto.setIcon(new ImageIcon("data/mapa/botones/texto.png"));
+					btnTexto.setIcon(new ImageIcon("data/mapa/botones/texto.png")); //$NON-NLS-1$
 					btnTexto.setVerticalTextPosition(SwingConstants.BOTTOM);
 					btnTexto.setHorizontalTextPosition(SwingConstants.CENTER);
 					btnTexto.setHorizontalTextPosition(JButton.CENTER);
 				}
-				btnBorrar = new JButton("Borrar todo");
+				btnBorrar = new JButton(Messages.getString("PanelPerrera.9")); //$NON-NLS-1$
 				GridBagConstraints gbc_btnBorrar = new GridBagConstraints();
 				gbc_btnBorrar.fill = GridBagConstraints.BOTH;
 				gbc_btnBorrar.gridx = 0;
 				gbc_btnBorrar.gridy = 3;
 				pnl_herramientas.add(btnBorrar, gbc_btnBorrar);
 				btnBorrar.addActionListener(new BorrarImagenes());
-				btnBorrar.setIcon(new ImageIcon("data/mapa/botones/borrar.png"));
+				btnBorrar.setIcon(new ImageIcon("data/mapa/botones/borrar.png")); //$NON-NLS-1$
 				btnBorrar.setVerticalTextPosition(SwingConstants.BOTTOM);
 				btnBorrar.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnBorrar.setHorizontalTextPosition(JButton.CENTER);
@@ -169,13 +169,13 @@ public class PanelPerrera extends JPanel {
 		{
 			toolkit = Toolkit.getDefaultToolkit();
 
-			imgPerrete = toolkit.getImage("data/mapa/botones/perrete.png");
-			imgRectangulo = toolkit.getImage("data/mapa/botones/Rectangulo.png");
-			imagTexto = toolkit.getImage("data/mapa/botones/Texto.png");
+			imgPerrete = toolkit.getImage("data/mapa/botones/perrete.png"); //$NON-NLS-1$
+			imgRectangulo = toolkit.getImage("data/mapa/botones/Rectangulo.png"); //$NON-NLS-1$
+			imagTexto = toolkit.getImage("data/mapa/botones/Texto.png"); //$NON-NLS-1$
 
-			cursorPerrete = toolkit.createCustomCursor(imgPerrete, new Point(0,0),"CURSOR_PERRETE");
-			cursorRectangulo = toolkit.createCustomCursor(imgRectangulo, new Point(0,0),"CURSOR_RECTANGULO");
-			cursorTexto= toolkit.createCustomCursor(imagTexto, new Point(0,0),"CURSOR_TEXTO");
+			cursorPerrete = toolkit.createCustomCursor(imgPerrete, new Point(0,0),"CURSOR_PERRETE"); //$NON-NLS-1$
+			cursorRectangulo = toolkit.createCustomCursor(imgRectangulo, new Point(0,0),"CURSOR_RECTANGULO"); //$NON-NLS-1$
+			cursorTexto= toolkit.createCustomCursor(imagTexto, new Point(0,0),"CURSOR_TEXTO"); //$NON-NLS-1$
 
 
 
@@ -239,10 +239,10 @@ public class PanelPerrera extends JPanel {
 				txtTexto.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg) {
 
-						if(!txtTexto.getText().equals("")) {
+						if(!txtTexto.getText().equals("")) { //$NON-NLS-1$
 							areaDibujo.addObjetoGrafico(new TextoGrafico(x, y+15, txtTexto.getText(), colorDibujado));
 						}
-						txtTexto.setText("");
+						txtTexto.setText(""); //$NON-NLS-1$
 						txtTexto.setVisible(false);
 						areaDibujo.repaint();
 					}
