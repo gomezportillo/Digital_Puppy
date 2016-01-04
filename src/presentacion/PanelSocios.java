@@ -396,7 +396,11 @@ public class PanelSocios extends JPanel {
 		} catch (IOException ioe){
 			//System.out.println(ioe);
 		} catch(NumberFormatException nume){
+<<<<<<< HEAD
 			//System.out.println(nume);
+=======
+			System.out.println(nume);
+>>>>>>> a6196cfd8b285c66df0963e224e0549313e05662
 		}
 	}
 
@@ -415,6 +419,10 @@ public class PanelSocios extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			String nombre = JOptionPane.showInputDialog(Messages.getString("PanelSocios.39")); //$NON-NLS-1$
 			if (nombre != null && nombre.length()>1){
+<<<<<<< HEAD
+=======
+				System.out.println(nombre);
+>>>>>>> a6196cfd8b285c66df0963e224e0549313e05662
 				anadirALista(nombre);
 				tf_nombre.setText(nombre);
 			}
@@ -456,7 +464,11 @@ public class PanelSocios extends JPanel {
 					sp_cuota.getValue().toString() +"\r\n"+ //$NON-NLS-1$
 					lblFoto.getIcon() +"\r\n"+ //$NON-NLS-1$
 					tb_comentarios.getText();
+<<<<<<< HEAD
 			//System.out.println(stringToSave);
+=======
+			System.out.println(stringToSave);
+>>>>>>> a6196cfd8b285c66df0963e224e0549313e05662
 
 			int reply = JOptionPane.showConfirmDialog(frame, Messages.getString("PanelSocios.62"), Messages.getString("PanelSocios.63"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -473,7 +485,11 @@ public class PanelSocios extends JPanel {
 				}
 
 			} else {
+<<<<<<< HEAD
 				//System.out.println(Messages.getString("PanelSocios.69")); //$NON-NLS-1$
+=======
+				System.out.println(Messages.getString("PanelSocios.69")); //$NON-NLS-1$
+>>>>>>> a6196cfd8b285c66df0963e224e0549313e05662
 			}
 		}
 	}
