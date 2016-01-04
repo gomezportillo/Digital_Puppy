@@ -376,7 +376,6 @@ public class PanelPerdidos extends JPanel {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void cargarPerdido(String nombreArchivo) {
 		limpiarCampos();
 		File file = new File("data/perdidos/" + nombreArchivo); //$NON-NLS-1$

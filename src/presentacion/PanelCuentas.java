@@ -285,7 +285,7 @@ public class PanelCuentas extends JPanel {
 	}
 
 	public void cargarDatosfromCSV() {
-		File file = new File(this.nombreArchivoCuentas);
+		File file = new File(PanelCuentas.nombreArchivoCuentas);
 		try{
 			FileReader fr = new FileReader (file.getAbsolutePath());
 			BufferedReader br = new BufferedReader(fr);
@@ -301,7 +301,7 @@ public class PanelCuentas extends JPanel {
 
 				cantidadTotal+=Double.parseDouble(cantidad);
 			}
-
+			br.close();
 			lbl_balance.setText(String.valueOf(cantidadTotal) + " €");
 			ventanaPrincipal.lblInfo.setText("Cargado "+ file.getAbsolutePath());
 

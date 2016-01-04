@@ -39,7 +39,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
-import javax.swing.ScrollPaneConstants;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PanelVoluntarios extends JPanel {

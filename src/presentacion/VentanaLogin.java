@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 
+@SuppressWarnings("serial")
 public class VentanaLogin extends JFrame{
 
 	public JFrame getFrame() {
@@ -42,8 +43,6 @@ public class VentanaLogin extends JFrame{
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private JLabel lblNewLabel_2;
-	private VentanaPrincipal ventanaPrincipal;
-
 	/**
 	 * Launch the application.
 	 */
@@ -175,6 +174,7 @@ public class VentanaLogin extends JFrame{
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private class BtnNewButton_2ActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			String nombre = textField.getText(); 
@@ -183,7 +183,7 @@ public class VentanaLogin extends JFrame{
 				String ultima_conextion = cargarUltimaConextionYActualizar();
 				String mensaje = Messages.getString("VentanaLogin.14")+nombre+Messages.getString("VentanaLogin.15")+ultima_conextion; //$NON-NLS-1$ //$NON-NLS-2$
 				JOptionPane.showMessageDialog(frmLogin, mensaje, Messages.getString("VentanaLogin.16"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
-				ventanaPrincipal = new VentanaPrincipal();
+				new VentanaPrincipal();
 				frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frmLogin.dispose();	
 			}
@@ -201,7 +201,7 @@ public class VentanaLogin extends JFrame{
 			FileReader fr = new FileReader (file.getAbsolutePath());
 			BufferedReader br = new BufferedReader(fr);
 			u_c = br.readLine();
-			
+			br.close();
 			String[] mydate = (java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime())).split(" "); //$NON-NLS-1$
 			String fecha = mydate[0];
 			FileWriter fw = new FileWriter (file, false);

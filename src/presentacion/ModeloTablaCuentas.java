@@ -31,6 +31,7 @@ class ModeloTablaCuentas extends AbstractTableModel
 		return fila;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Class getColumnClass(int c) {
 		return getValueAt(0, c).getClass();
 	}
